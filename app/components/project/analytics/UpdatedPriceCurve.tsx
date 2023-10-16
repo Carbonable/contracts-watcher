@@ -23,6 +23,13 @@ export default function UpdatedPriceCurve() {
         parseResult: false
     });
 
+    const { data: priceTimesData, isLoading: isLoadingPriceTimes, error: errorPriceTimes } = useContractRead({
+        address: yielderAddress,
+        abi: yielderAbi,
+        functionName: 'get_price_times',
+        parseResult: false
+    });
+
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
@@ -37,32 +44,35 @@ export default function UpdatedPriceCurve() {
     };
 
     useEffect(() => {
-        if (updatedPriceData === undefined || updatedPriceTimesData === undefined) { return; }
+        if (updatedPriceData === undefined || updatedPriceTimesData === undefined || priceTimesData === undefined) { return; }
 
         const updatedPrices = (updatedPriceData as Array<string>).slice(1);
-        const times = (updatedPriceTimesData as Array<string>).slice(1);
+        const updatedTimes = (updatedPriceTimesData as Array<string>).slice(1);
+        const priceTimes = (priceTimesData as Array<string>).slice(1);
+        const lastPriceTime = new Date(Number(priceTimes[priceTimes.length - 1]) * 1000);
 
         updatedPrices.map(shortString.decodeShortString).join('');
         const filteredUpdatedPrices = updatedPrices.filter(price => price !== '0x0');
 
-        const data = times.map((time, i) => {
+        const data = updatedTimes.map((time, i) => {
+            const currentTime = new Date(Number(time) * 1000);
             return {
                 year: new Date(Number(time) * 1000).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-                updatedPrice: Number(filteredUpdatedPrices[i]),
+                updatedPrice: currentTime <= lastPriceTime ? Number(filteredUpdatedPrices[i]) : null,
+                futureUpdatedPrice: currentTime >= lastPriceTime ? Number(filteredUpdatedPrices[i]): null,
             }
         });
 
         setGraphData(data);
-    }, [updatedPriceTimesData, updatedPriceData]);
+    }, [updatedPriceTimesData, updatedPriceData, priceTimesData]);
 
-
-    if (isLoadingTimes || isLoadingUpdatedPrices) {
+    if (isLoadingTimes || isLoadingUpdatedPrices || isLoadingPriceTimes) {
         return (
             <div>Loading absorption curve...</div>
         )
     }
 
-    if (errorTimes || errorUpdatedPrices) {
+    if (errorTimes || errorUpdatedPrices || errorPriceTimes) {
         return (
             <div>Error loading absorption curve...</div>
         )
@@ -88,6 +98,10 @@ export default function UpdatedPriceCurve() {
                                 <stop offset="5%" stopColor="#877B44" stopOpacity={0.8}/>
                                 <stop offset="95%" stopColor="#877B44" stopOpacity={0}/>
                             </linearGradient>
+                            <linearGradient id="colorFutureUpdatedPrice" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#877B44" stopOpacity={0.4}/>
+                                <stop offset="95%" stopColor="#877B44" stopOpacity={0}/>
+                            </linearGradient>
                         </defs>
                         <XAxis dataKey="year">
                             <Label value="Date" offset={-4} position="insideBottom" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
@@ -96,6 +110,7 @@ export default function UpdatedPriceCurve() {
                             <Label value="Sell Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>
                         <Area name="Updated Price Curve" type="monotone" fill={'url(#colorUpdatedPrice)'} stroke={'#877B44'} dot={false} activeDot={true} dataKey="updatedPrice" />
+                        <Area name="Updated Price Curve" type="monotone" fill={'url(#colorFutureUpdatedPrice)'} stroke={'#877B44'} dot={false} activeDot={true} dataKey="futureUpdatedPrice" strokeDasharray="4 4" />
                         <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     </AreaChart>
                 </ResponsiveContainer>
