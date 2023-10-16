@@ -24,6 +24,13 @@ export default function CumulativeSaleCurve() {
         parseResult: false
     });
 
+    const { data: priceTimesData, isLoading: isLoadingPriceTimes, error: errorPriceTimes } = useContractRead({
+        address: yielderAddress,
+        abi: yielderAbi,
+        functionName: 'get_price_times',
+        parseResult: false
+    });
+
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
@@ -38,31 +45,35 @@ export default function CumulativeSaleCurve() {
     };
 
     useEffect(() => {
-        if (cumSaleTimesData === undefined || cumSaleData === undefined) { return; }
+        if (cumSaleTimesData === undefined || cumSaleData === undefined || priceTimesData === undefined) { return; }
 
         const cumSale = (cumSaleData as Array<string>).slice(1);
         const times = (cumSaleTimesData as Array<string>).slice(1);
 
         cumSale.map(shortString.decodeShortString).join('');
         const filteredCumSale = cumSale.filter((price, i) => price !== '0x0' || i === 0);
+        const priceTimes = (priceTimesData as Array<string>).slice(1);
+        const lastPriceTime = new Date(Number(priceTimes[priceTimes.length - 1]) * 1000);
 
         const data = times.map((time, i) => {
+            const currentTime = new Date(Number(time) * 1000);
             return {
                 year: new Date(Number(time) * 1000).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-                cumSale: Number(filteredCumSale[i]) * Math.pow(10, -DECIMALS)
+                cumSale: currentTime <= lastPriceTime ? Number(filteredCumSale[i]) * Math.pow(10, -DECIMALS) : null,
+                futureCumSale: currentTime >= lastPriceTime ? Number(filteredCumSale[i]) * Math.pow(10, -DECIMALS): null,
             }
         });
         setGraphData(data);
-    }, [cumSaleTimesData, cumSaleData]);
+    }, [cumSaleTimesData, cumSaleData, priceTimesData]);
 
 
-    if (isLoadingTimes || isLoadingCumSale) {
+    if (isLoadingTimes || isLoadingCumSale || isLoadingPriceTimes) {
         return (
             <div>Loading absorption curve...</div>
         )
     }
 
-    if (errorTimes || errorCumSale) {
+    if (errorTimes || errorCumSale || errorPriceTimes) {
         return (
             <div>Error loading absorption curve...</div>
         )
@@ -88,6 +99,10 @@ export default function CumulativeSaleCurve() {
                                 <stop offset="5%" stopColor="#334566" stopOpacity={0.8}/>
                                 <stop offset="95%" stopColor="#334566" stopOpacity={0}/>
                             </linearGradient>
+                            <linearGradient id="colorFutureCumSalePrice" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#334566" stopOpacity={0.4}/>
+                                <stop offset="95%" stopColor="#334566" stopOpacity={0}/>
+                            </linearGradient>
                         </defs>
                         <XAxis dataKey="year">
                             <Label value="Date" offset={-4} position="insideBottom" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
@@ -96,6 +111,7 @@ export default function CumulativeSaleCurve() {
                             <Label value="Sell Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>
                         <Area name="Cumulative Sale curve" type="monotone" dataKey="cumSale" fill={'url(#colorCumSalePrice)'} stroke={'#334566'} dot={false} activeDot={true} />
+                        <Area name="Cumulative Sale curve" type="monotone" dataKey="futureCumSale" fill={'url(#colorFutureCumSalePrice)'} stroke={'#334566'} dot={false} activeDot={true} strokeDasharray="4 4" />
                         <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     </AreaChart>
                 </ResponsiveContainer>
