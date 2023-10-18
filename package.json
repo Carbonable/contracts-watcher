@@ -1,5 +1,5 @@
 {
-  "name": "my-remix-app",
+  "name": "carbonable-contracts-watcher",
   "private": true,
   "sideEffects": false,
   "type": "module",
