@@ -4,10 +4,11 @@ import { Area, AreaChart, Label, ResponsiveContainer, Tooltip, XAxis, YAxis } fr
 import { Subtitle } from "~/components/common/Title";
 import { useProjectAbis } from "../ProjectAbisWrapper";
 import { shortString } from "starknet";
-import { DECIMALS } from "~/types/config";
+import { SECONDS_PER_YEAR } from "~/types/config";
+import { bigIntToNumber } from "~/utils/starknet";
 
-export default function CumulativeSaleCurve() {
-    const { yielderAbi, yielderAddress } = useProjectAbis();
+export default function APRCurve() {
+    const { yielderAbi, yielderAddress, minterAbi, minterAddress, projectAbi, projectAddress, slot } = useProjectAbis();
     const [graphData, setGraphData] = useState([{}]);
 
     const { data: cumSaleData, isLoading: isLoadingCumSale, error: errorCumSale } = useContractRead({
@@ -31,12 +32,25 @@ export default function CumulativeSaleCurve() {
         parseResult: false
     });
 
+    const { data: unitPriceData, isLoading: isLoadingUnitPrice, error: errorUnitPrice } = useContractRead({
+        address: minterAddress,
+        abi: minterAbi,
+        functionName: 'get_unit_price',
+    });
+
+    const { data: projectValueData, isLoading: isLoadingProjectValue, error: errorProjectValue } = useContractRead({
+        address: projectAddress,
+        abi: projectAbi,
+        functionName: 'get_project_value',
+        args: [slot],
+    });
+
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
                 <div className="px-8 pt-4 pb-4 bg-neutral-700/90 border border-neutral-500 font-inter rounded-xl">
                     <p className="text-center uppercase bold text-neutral-100">{label}</p>
-                    <p className="text-left text-blue-dark mt-2">Cumulative sale: ${Number(payload[0].value).toFixed(2)}</p>
+                    <p className="text-left text-[#ffe4c4] mt-2">APR: {Number(payload[0].value).toFixed(2)}%</p>
                 </div>
             );
         }
@@ -45,7 +59,7 @@ export default function CumulativeSaleCurve() {
     };
 
     useEffect(() => {
-        if (cumSaleTimesData === undefined || cumSaleData === undefined || priceTimesData === undefined) { return; }
+        if (cumSaleTimesData === undefined || cumSaleData === undefined || priceTimesData === undefined || unitPriceData === undefined || projectValueData === undefined) { return; }
 
         const cumSale = (cumSaleData as Array<string>).slice(1);
         const times = (cumSaleTimesData as Array<string>).slice(1);
@@ -57,23 +71,28 @@ export default function CumulativeSaleCurve() {
 
         const data = times.map((time, i) => {
             const currentTime = new Date(Number(time) * 1000);
+            
+            const num = i === 0 ? null : (Number(filteredCumSale[i]) - Number(filteredCumSale[i - 1])) * SECONDS_PER_YEAR;
+            const den  = i === 0 ? null : (bigIntToNumber(unitPriceData as bigint) * bigIntToNumber(projectValueData as bigint)) * (Number(times[i]) - Number(times[i - 1]));
+            const apr = num && den ? num / den * 100 : 0;
+
             return {
                 year: new Date(Number(time) * 1000).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-                cumSale: currentTime <= lastPriceTime ? Number(filteredCumSale[i]) * Math.pow(10, -DECIMALS) : null,
-                futureCumSale: currentTime >= lastPriceTime ? Number(filteredCumSale[i]) * Math.pow(10, -DECIMALS): null,
+                apr: currentTime <= lastPriceTime ? apr : null,
+                future_apr: currentTime >= lastPriceTime ? apr : null,
             }
         });
         setGraphData(data);
-    }, [cumSaleTimesData, cumSaleData, priceTimesData]);
+    }, [cumSaleTimesData, cumSaleData, priceTimesData, unitPriceData, projectValueData]);
 
 
-    if (isLoadingTimes || isLoadingCumSale || isLoadingPriceTimes) {
+    if (isLoadingTimes || isLoadingCumSale || isLoadingPriceTimes || isLoadingUnitPrice || isLoadingProjectValue) {
         return (
             <div>Loading absorption curve...</div>
         )
     }
 
-    if (errorTimes || errorCumSale || errorPriceTimes) {
+    if (errorTimes || errorCumSale || errorPriceTimes || errorUnitPrice || errorProjectValue) {
         return (
             <div>Error loading absorption curve...</div>
         )
@@ -81,7 +100,7 @@ export default function CumulativeSaleCurve() {
 
     return (
         <>
-            <Subtitle title="Cumulative Sale Curve" />
+            <Subtitle title="APR Curve" />
             <div className="w-full min-h-[400px]">
                 <ResponsiveContainer width="100%" height="100%" minHeight='400px'>
                     <AreaChart
@@ -95,23 +114,23 @@ export default function CumulativeSaleCurve() {
                         }}
                     >
                         <defs>
-                            <linearGradient id="colorCumSalePrice" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#334566" stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor="#334566" stopOpacity={0}/>
+                            <linearGradient id="colorAPR" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#ffe4c4" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#ffe4c4" stopOpacity={0}/>
                             </linearGradient>
-                            <linearGradient id="colorFutureCumSalePrice" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#334566" stopOpacity={0.3}/>
-                                <stop offset="95%" stopColor="#334566" stopOpacity={0}/>
+                            <linearGradient id="colorFutureAPR" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#ffe4c4" stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor="#ffe4c4" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
                         <XAxis dataKey="year">
                             <Label value="Date" offset={-4} position="insideBottom" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </XAxis>
                         <YAxis>
-                            <Label value="Sell Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
+                            <Label value="APR (%)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>
-                        <Area name="Cumulative Sale curve" type="monotone" dataKey="cumSale" fill={'url(#colorCumSalePrice)'} stroke={'#334566'} dot={false} activeDot={true} />
-                        <Area name="Cumulative Sale curve" type="monotone" dataKey="futureCumSale" fill={'url(#colorFutureCumSalePrice)'} stroke={'#334566'} dot={false} activeDot={true} strokeDasharray="4 4" />
+                        <Area name="APR curve" type="monotone" dataKey="apr" fill={'url(#colorAPR)'} stroke={'#ffe4c4'} dot={false} activeDot={true} />
+                        <Area name="APR curve" type="monotone" dataKey="future_apr" fill={'url(#colorFutureAPR)'} stroke={'#ffe4c4'} dot={false} activeDot={true} strokeDasharray="4 4" />
                         <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     </AreaChart>
                 </ResponsiveContainer>

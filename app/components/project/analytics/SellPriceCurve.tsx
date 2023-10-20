@@ -28,7 +28,7 @@ export default function SellPricesCurve() {
             return (
                 <div className="px-8 pt-4 pb-4 bg-neutral-700/90 border border-neutral-500 font-inter rounded-xl">
                     <p className="text-center uppercase bold text-neutral-100">{label}</p>
-                    <p className="text-left text-blue-dark mt-2">Sell price: ${payload[0].value}</p>
+                    <p className="text-left text-blue-dark mt-2">Sell price: ${Number(payload[0].value).toFixed(2)}</p>
                 </div>
             );
         }
@@ -95,7 +95,7 @@ export default function SellPricesCurve() {
                         <YAxis>
                             <Label value="Sell Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>
-                        <Area name="Sell Price Curve" type="monotone" dataKey="sellPrices" fill={'url(#colorSellPrice)'} stroke={'#334566'} dot={false} activeDot={true} />
+                        <Area name="Sell Price Curve" type="stepBefore" dataKey="sellPrices" fill={'url(#colorSellPrice)'} stroke={'#334566'} dot={false} activeDot={true} />
                         <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     </AreaChart>
                 </ResponsiveContainer>

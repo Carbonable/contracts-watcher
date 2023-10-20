@@ -35,7 +35,7 @@ export default function UpdatedPriceCurve() {
             return (
                 <div className="px-8 pt-4 pb-4 bg-neutral-700/90 border border-neutral-500 font-inter rounded-xl">
                     <p className="text-center uppercase bold text-neutral-100">{label}</p>
-                    <p className="text-left text-orange-dark mt-2">Updated price: ${payload[0].value}</p>
+                    <p className="text-left text-orange-dark mt-2">Updated price: ${Number(payload[0].value).toFixed(2)}</p>
                 </div>
             );
         }
@@ -109,8 +109,8 @@ export default function UpdatedPriceCurve() {
                         <YAxis>
                             <Label value="Sell Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>
-                        <Area name="Updated Price Curve" type="monotone" fill={'url(#colorUpdatedPrice)'} stroke={'#877B44'} dot={false} activeDot={true} dataKey="updatedPrice" />
-                        <Area name="Updated Price Curve" type="monotone" fill={'url(#colorFutureUpdatedPrice)'} stroke={'#877B44'} dot={false} activeDot={true} dataKey="futureUpdatedPrice" strokeDasharray="4 4" />
+                        <Area name="Updated Price Curve" type="stepBefore" fill={'url(#colorUpdatedPrice)'} stroke={'#877B44'} dot={false} activeDot={true} dataKey="updatedPrice" />
+                        <Area name="Updated Price Curve" type="stepBefore" fill={'url(#colorFutureUpdatedPrice)'} stroke={'#877B44'} dot={false} activeDot={true} dataKey="futureUpdatedPrice" strokeDasharray="4 4" />
                         <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     </AreaChart>
                 </ResponsiveContainer>
