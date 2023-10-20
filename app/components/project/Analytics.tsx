@@ -2,8 +2,8 @@ import { useProjectAbis } from './ProjectAbisWrapper';
 import CumulativeAbsorptionCurve from './analytics/CumulativeAbsorptionCurve';
 import SellPricesCurve from './analytics/SellPriceCurve';
 import CumulativeSaleCurve from './analytics/CumulativeSaleCurve';
-import CompensatedPriceCurve from './analytics/UpdatedPriceCurve';
 import UpdatedPriceCurve from './analytics/UpdatedPriceCurve';
+import APRCurve from './analytics/APRCurve';
 
 export default function Analytics() {
     const { projectAbi, yielderAbi } = useProjectAbis();
@@ -20,6 +20,7 @@ export default function Analytics() {
             <SellPricesCurve />
             <UpdatedPriceCurve />
             <CumulativeSaleCurve />
+            <APRCurve />
         </>
     )
 }

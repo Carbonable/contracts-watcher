@@ -30,7 +30,7 @@ export default function CumulativeAbsorptionCurve() {
             return (
                 <div className="px-8 pt-4 pb-4 bg-neutral-700/90 border border-neutral-500 font-inter rounded-xl">
                     <p className="text-center uppercase bold text-neutral-100">{label}</p>
-                    <p className="text-left text-greenish-500 mt-2">Absorption: t{payload[0].value}</p>
+                    <p className="text-left text-greenish-500 mt-2">Absorption: t{Number(payload[0].value).toFixed(2)}</p>
                 </div>
             );
         }
