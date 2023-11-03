@@ -1,10 +1,11 @@
 import { useContractRead } from "@starknet-react/core";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
 import LabelComponent from "~/components/common/LabelComponent";
+import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function APR({ minterAddress }: { minterAddress: string}) {
     const { yielderAbi, yielderAddress } = useProjectAbis();
-    const { data, error } = useContractRead({
+    const { data, error, isError, isLoading } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_apr',
@@ -12,15 +13,16 @@ export default function APR({ minterAddress }: { minterAddress: string}) {
         parseResult: false
     });
 
-    if (error) {
-        return (
-            <div>Error loading APR...</div>
-        )
-    }
+    const title = "APR";
 
-    if (data === undefined || typeof data !== 'object') {
+    if (isLoading || isError || data === undefined || typeof data !== 'object') {
         return (
-            <div>APR is undefined...</div>
+            <LoadingAndError
+                title={title}
+                isLoading={isLoading}
+                isError={isError || (data === undefined || typeof data !== 'object')}
+                error={error}
+            />
         )
     }
 
@@ -31,7 +33,7 @@ export default function APR({ minterAddress }: { minterAddress: string}) {
 
     return (
         <LabelComponent
-            title="APR"
+            title={title}
             value={`${apr}%`}
         />
     )

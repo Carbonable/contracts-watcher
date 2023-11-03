@@ -1,24 +1,26 @@
 import { useContractRead } from "@starknet-react/core";
 import LabelComponent from "~/components/common/LabelComponent";
 import { num, type Abi, shortString } from "starknet";
+import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function PaymentTokenSymbol({ abi, address }: { abi: Abi, address: string}) {
 
-    const { data, error } = useContractRead({
+    const { data, error, isError, isLoading } = useContractRead({
         address,
         abi,
         functionName: 'symbol'
     });
 
-    if (error) {
-        return (
-            <div>Error loading payment token symbol...</div>
-        )
-    }
+    const title = "Payment token";
 
-    if (data === undefined || typeof data !== 'object') {
+    if (isLoading || isError || data === undefined || typeof data !== 'object') {
         return (
-            <div>Payment token symbol is undefined...</div>
+            <LoadingAndError
+                title={title}
+                isLoading={isLoading}
+                isError={isError || (data === undefined || typeof data !== 'object')}
+                error={error}
+            />
         )
     }
 

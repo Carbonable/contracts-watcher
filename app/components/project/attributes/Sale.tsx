@@ -7,6 +7,8 @@ import ReservedValue from "./minter/ReservedValue";
 import MaxValue from "./minter/MaxValue";
 import PaymentTokenAddress from "./payment/PaymentTokenAddress";
 import { useProjectAbis } from "../ProjectAbisWrapper";
+import AvailableValue from "./minter/AvailableValue";
+import RemainingValue from "./minter/RemainingValue";
 
 export default function Sale() {
     const { minterAbi, minterAddress } = useProjectAbis();
@@ -20,6 +22,8 @@ export default function Sale() {
             <MinValuePerTx />
             <MaxValuePerTx />
             <UnitPrice />
+            <AvailableValue />
+            <RemainingValue />
             <ReservedValue />
             <MaxValue />
             { minterAbi && minterAddress &&

@@ -13,3 +13,11 @@ export function Subtitle({ title }: { title: string }) {
         </div>
     )
 }
+
+export function ChartsDescription({children}: {children: React.ReactNode}) {
+    return (
+        <div className="text-neutral-300 mb-8 text-base">
+            {children}
+        </div>
+    )
+}

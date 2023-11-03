@@ -1,9 +1,9 @@
 import { useContractRead } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import { Area, AreaChart, Label, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { Subtitle } from "~/components/common/Title";
 import { useProjectAbis } from "../ProjectAbisWrapper";
 import { shortString } from "starknet";
+import { Subtitle } from "~/components/common/Title";
 
 export default function UpdatedPriceCurve() {
     const { yielderAbi, yielderAddress } = useProjectAbis();
@@ -80,7 +80,7 @@ export default function UpdatedPriceCurve() {
 
     return (
         <>
-            <Subtitle title="Updated Price Curve" />
+            <Subtitle title="Price Curve" />
             <div className="w-full min-h-[400px]">
                 <ResponsiveContainer width="100%" height="100%" minHeight='400px'>
                     <AreaChart

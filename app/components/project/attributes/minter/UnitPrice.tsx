@@ -2,32 +2,34 @@ import { useContractRead } from "@starknet-react/core";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
 import LabelComponent from "~/components/common/LabelComponent";
 import { bigIntToNumber } from "~/utils/starknet";
+import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function UnitPrice() {
     const { minterAbi, minterAddress } = useProjectAbis();
-    const { data, error } = useContractRead({
+    const { data, error, isLoading, isError } = useContractRead({
         address: minterAddress,
         abi: minterAbi,
         functionName: 'get_unit_price'
     });
 
-    if (error) {
+    const title = "Unit price";
+
+    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
         return (
-            <div>Error loading min value per tx...</div>
+            <LoadingAndError
+                title={title}
+                isLoading={isLoading}
+                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                error={error}
+            />
         )
     }
 
-    if (data === undefined || typeof data !== 'bigint') {
-        return (
-            <div>Unit price is undefined...</div>
-        )
-    }
 
     return (
         <LabelComponent
-            title="Unit price"
-            value={`$${bigIntToNumber(data).toString()}`}
-
+            title={title}
+            value={bigIntToNumber(data).toString()}
         />
     )
 }

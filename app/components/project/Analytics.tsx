@@ -1,6 +1,5 @@
 import { useProjectAbis } from './ProjectAbisWrapper';
 import CumulativeAbsorptionCurve from './analytics/CumulativeAbsorptionCurve';
-import SellPricesCurve from './analytics/SellPriceCurve';
 import CumulativeSaleCurve from './analytics/CumulativeSaleCurve';
 import UpdatedPriceCurve from './analytics/UpdatedPriceCurve';
 import APRCurve from './analytics/APRCurve';
@@ -19,7 +18,6 @@ export default function Analytics() {
     return (
         <>
             <CumulativeAbsorptionCurve />
-            <SellPricesCurve />
             <UpdatedPriceCurve />
             <CumulativeSaleCurve />
             { displayAPR && <APRCurve /> }

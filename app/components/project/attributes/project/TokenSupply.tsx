@@ -1,32 +1,34 @@
 import { useContractRead } from "@starknet-react/core";
 import LabelComponent from "~/components/common/LabelComponent";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
+import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function TokenSupply() {
     const { projectAbi, projectAddress, slot } = useProjectAbis();
 
-    const { data, error } = useContractRead({
+    const { data, error, isError, isLoading } = useContractRead({
         address: projectAddress,
         abi: projectAbi,
         functionName: 'token_supply_in_slot',
         args: [slot]
     });
 
-    if (error) {
-        return (
-            <div>Error loading project token supply...</div>
-        )
-    }
+    const title = "Token supply";
 
-    if (data === undefined || typeof data !== 'bigint') {
+    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
         return (
-            <div>Token supply  is undefined...</div>
+            <LoadingAndError
+                title={title}
+                isLoading={isLoading}
+                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                error={error}
+            />
         )
     }
 
     return (
         <LabelComponent
-            title="Token supply"
+            title={title}
             value={data.toString()}
 
         />

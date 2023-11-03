@@ -5,17 +5,17 @@ import { bigIntToNumber } from "~/utils/starknet";
 import { DECIMALS } from "~/types/config";
 import LoadingAndError from "~/components/common/LoadingAndError";
 
-export default function TotalValue() {
+export default function ProjectValue() {
     const { projectAbi, projectAddress, slot } = useProjectAbis();
 
     const { data, error, isError, isLoading } = useContractRead({
         address: projectAddress,
         abi: projectAbi,
-        functionName: 'total_value',
+        functionName: 'get_project_value',
         args: [slot]
     });
 
-    const title = "Total value";
+    const title = "Poject value";
 
     if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
         return (

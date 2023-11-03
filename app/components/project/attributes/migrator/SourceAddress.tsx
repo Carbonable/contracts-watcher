@@ -3,32 +3,34 @@ import { useProjectAbis } from "../../ProjectAbisWrapper";
 import { getChecksumAddress, num } from "starknet";
 import { ContractLinkComponent } from "~/components/common/LinkComponent";
 import { useConfig } from "~/root";
+import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function SourceAddress() {
     const { migratorAbi, migratorAddress } = useProjectAbis();
     const { voyagerContractURL } = useConfig();
 
-    const { data, error } = useContractRead({
+    const { data, error, isError, isLoading } = useContractRead({
         address: migratorAddress,
         abi: migratorAbi,
         functionName: 'source_address'
     });
 
-    if (error) {
-        return (
-            <div>Error loading migrator source address...</div>
-        )
-    }
+    const title = "Source address";
 
-    if (data === undefined || typeof data !== 'bigint') {
+    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
         return (
-            <div>Migrator source address is undefined...</div>
+            <LoadingAndError
+                title={title}
+                isLoading={isLoading}
+                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                error={error}
+            />
         )
     }
 
     return (
         <ContractLinkComponent
-            title="Source address"
+            title={title}
             address={getChecksumAddress(num.toHex(data))}
             href={voyagerContractURL + getChecksumAddress(num.toHex(data))}
         />

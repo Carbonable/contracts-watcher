@@ -10,27 +10,29 @@ export default function PreSaleOpen() {
         functionName: 'is_pre_sale_open'
     });
 
+    const title = "Pre-sale";
+
     if (isLoading) {
         return (
-            <div>Loading pre sale open...</div>
+            <BooleanComponent
+                title={title}
+                text="Loading..."
+            />
         )
     }
 
-    if (error) {
+    if (error || data === undefined || typeof data !== 'boolean') {
         return (
-            <div>Error loading pre sale open...</div>
-        )
-    }
-
-    if (data === undefined || typeof data !== 'boolean') {
-        return (
-            <div>Pre sale open is undefined...</div>
+            <BooleanComponent
+                title={title}
+                text="Error"
+            />
         )
     }
 
     return (
         <BooleanComponent
-            title="Pre-sale"
+            title={title}
             text={data === true ? "Open" : "Closed"}
             value={data}
         />

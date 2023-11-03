@@ -3,33 +3,35 @@ import { num, getChecksumAddress } from "starknet";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
 import { useConfig } from "~/root";
 import { ContractLinkComponent } from "~/components/common/LinkComponent";
+import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function CertifierAccount() {
     const { projectAbi, projectAddress, slot } = useProjectAbis();
     const { voyagerContractURL } = useConfig();
 
-    const { data, error } = useContractRead({
+    const { data, error, isLoading, isError } = useContractRead({
         address: projectAddress,
         abi: projectAbi,
         functionName: 'get_certifier',
         args: [slot]
     });
 
-    if (error) {
-        return (
-            <div>Error loading project certifier account...</div>
-        )
-    }
+    const title = "Certifier account";
 
-    if (data === undefined || typeof data !== 'bigint') {
+    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
         return (
-            <div>Certifier account is undefined...</div>
+            <LoadingAndError
+                title={title}
+                isLoading={isLoading}
+                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                error={error}
+            />
         )
     }
 
     return (
         <ContractLinkComponent
-            title="Certifier account"
+            title={title}
             address={getChecksumAddress(num.toHex(data))}
             href={voyagerContractURL + getChecksumAddress(num.toHex(data))}
         />

@@ -4,27 +4,35 @@ import BooleanComponent from "~/components/common/BooleanComponent";
 
 export default function PublicSaleOpen() {
     const { minterAbi, minterAddress } = useProjectAbis();
-    const { data, error } = useContractRead({
+    const { data, error, isLoading } = useContractRead({
         address: minterAddress,
         abi: minterAbi,
         functionName: 'is_public_sale_open'
     });
 
-    if (error) {
+    const title = "Public sale";
+
+    if (isLoading) {
         return (
-            <div>Error loading public sale open...</div>
+            <BooleanComponent
+                title={title}
+                text="Loading..."
+            />
         )
     }
 
-    if (data === undefined || typeof data !== 'boolean') {
+    if (error || data === undefined || typeof data !== 'boolean') {
         return (
-            <div>Pre sale open is undefined...</div>
+            <BooleanComponent
+                title={title}
+                text="Error"
+            />
         )
     }
 
     return (
         <BooleanComponent
-            title="Public sale"
+            title={title}
             text={data === true ? "Open" : "Closed"}
             value={data}
         />

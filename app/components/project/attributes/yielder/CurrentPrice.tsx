@@ -2,30 +2,32 @@ import { useContractRead } from "@starknet-react/core";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
 import LabelComponent from "~/components/common/LabelComponent";
 import { bigIntToNumber } from "~/utils/starknet";
+import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function CurrentPrice() {
     const { yielderAbi, yielderAddress } = useProjectAbis();
-    const { data, error } = useContractRead({
+    const { data, error, isError, isLoading } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_current_price'
     });
 
-    if (error) {
-        return (
-            <div>Error loading current price...</div>
-        )
-    }
+    const title = "Current price";
 
-    if (data === undefined || typeof data !== 'bigint') {
+    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
         return (
-            <div>Current price is undefined...</div>
+            <LoadingAndError
+                title={title}
+                isLoading={isLoading}
+                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                error={error}
+            />
         )
     }
 
     return (
         <LabelComponent
-            title="Current Price"
+            title={title}
             value={`$${bigIntToNumber(data).toString()}`}
         />
     )

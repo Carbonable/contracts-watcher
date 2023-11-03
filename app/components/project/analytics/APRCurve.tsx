@@ -1,7 +1,7 @@
 import { useContractRead } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import { Area, AreaChart, Label, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { Subtitle } from "~/components/common/Title";
+import { ChartsDescription, Subtitle } from "~/components/common/Title";
 import { useProjectAbis } from "../ProjectAbisWrapper";
 import { shortString } from "starknet";
 import { SECONDS_PER_YEAR } from "~/types/config";
@@ -101,6 +101,9 @@ export default function APRCurve() {
     return (
         <>
             <Subtitle title="APR Curve" />
+            <ChartsDescription>
+                This charts shows the APR curve of the project. Past values represents the real APR while future values are the expected APR based on expected sell prices and project absorption.
+            </ChartsDescription>
             <div className="w-full min-h-[400px]">
                 <ResponsiveContainer width="100%" height="100%" minHeight='400px'>
                     <AreaChart

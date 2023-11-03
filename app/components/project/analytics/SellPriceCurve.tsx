@@ -1,7 +1,7 @@
 import { useContractRead } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import { Area, AreaChart, Label, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { Subtitle } from "~/components/common/Title";
+import { ChartsDescription, Subtitle } from "~/components/common/Title";
 import { useProjectAbis } from "../ProjectAbisWrapper";
 import { shortString } from "starknet";
 
@@ -71,6 +71,9 @@ export default function SellPricesCurve() {
     return (
         <>
             <Subtitle title="Sell Price Curve" />
+            <ChartsDescription>
+                This charts shows the price at which the carbon credits are sold over the time.
+            </ChartsDescription>
             <div className="w-full min-h-[400px]">
                 <ResponsiveContainer width="100%" height="100%" minHeight='400px'>
                     <AreaChart 

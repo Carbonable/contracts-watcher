@@ -1,5 +1,6 @@
 import CertifierAccount from "./project/CertifierAccount";
 import Name from "./project/Name";
+import ProjectValue from "./project/ProjectValue";
 import Symbol from "./project/Symbol";
 import TokenSupply from "./project/TokenSupply";
 import TotalValue from "./project/TotalValue";
@@ -13,6 +14,7 @@ export default function Project() {
             <ValueDecimals />
             <TokenSupply />
             <TotalValue />
+            <ProjectValue />
             <CertifierAccount />
         </>
     )
