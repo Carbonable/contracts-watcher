@@ -11,6 +11,7 @@ export type Project = {
     yielder: string;
     offseter: string;
     migrator?: string;
+    old_nft?: string;
 }
 
 export const DECIMALS = 6;

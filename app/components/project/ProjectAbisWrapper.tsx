@@ -15,6 +15,7 @@ type ProjectAbiContextType = {
     yielderAddress?: string,
     offseterAddress?: string,
     migratorAddress?: string,
+    oldNFTAddress?: string,
     slot: string
 }
 
@@ -24,10 +25,11 @@ export default function ProjectAbisWrapper({ children, projectAddress, slot }: {
     const { provider } = useProvider();
     const { projects } = useConfig();
 
-    const minterAddress = useMemo(() => projects.find((project) => project.project === projectAddress)?.minter, [projects, projectAddress]);
-    const yielderAddress = useMemo(() => projects.find((project) => project.project === projectAddress)?.yielder, [projects, projectAddress]);
-    const offseterAddress = useMemo(() => projects.find((project) => project.project === projectAddress)?.offseter, [projects, projectAddress]);
-    const migratorAddress = useMemo(() => projects.find((project) => project.project === projectAddress)?.migrator, [projects, projectAddress]);
+    const minterAddress = useMemo(() => projects.find((project) => project.slot === slot)?.minter, [projects, slot]);
+    const yielderAddress = useMemo(() => projects.find((project) => project.slot === slot)?.yielder, [projects, slot]);
+    const offseterAddress = useMemo(() => projects.find((project) => project.slot === slot)?.offseter, [projects, slot]);
+    const migratorAddress = useMemo(() => projects.find((project) => project.slot === slot)?.migrator, [projects, slot]);
+    const oldNFTAddress = useMemo(() => projects.find((project) => project.slot === slot)?.old_nft, [projects, slot]);
 
     const [projectAbi, setProjectAbi] = useState<Abi|undefined>(undefined);
     const [minterAbi, setMinterAbi] = useState<Abi|undefined>(undefined);
@@ -93,7 +95,7 @@ export default function ProjectAbisWrapper({ children, projectAddress, slot }: {
 
     return (
         <ProjectAbiContext.Provider 
-            value={{ projectAbi, minterAbi, yielderAbi, offseterAbi, migratorAbi, projectAddress, minterAddress, yielderAddress, offseterAddress, migratorAddress, slot }}
+            value={{ projectAbi, minterAbi, yielderAbi, offseterAbi, migratorAbi, projectAddress, minterAddress, yielderAddress, offseterAddress, migratorAddress, oldNFTAddress, slot }}
         >
             { children }
         </ProjectAbiContext.Provider>

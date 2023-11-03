@@ -1,7 +1,16 @@
 import { Contract, num } from "starknet";
 
 export async function fetchAbi(provider: any, address: string) {
-    const result = await provider.getClassAt(address);
+    let result;
+    try {
+        result = await provider.getClassAt(address);
+    } catch (e) {
+        try {
+            result = await provider.getClassByHash(address);
+        } catch (e) {
+            return undefined;
+        }
+    }
     const abiResult = result.abi;
     const isProxy = abiResult.some((func: any) => (func.name === '__default__'));
 

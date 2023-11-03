@@ -3,7 +3,7 @@ import { useConfig } from "~/root";
 import { ContractLinkComponent } from "~/components/common/LinkComponent";
 
 export default function Addresses() {
-    const { projectAddress, minterAddress, yielderAddress, offseterAddress } = useProjectAbis();
+    const { projectAddress, minterAddress, yielderAddress, offseterAddress, migratorAddress } = useProjectAbis();
     const { voyagerContractURL } = useConfig();
 
     return (
@@ -27,6 +27,11 @@ export default function Addresses() {
                 title="Offseter address"
                 address={offseterAddress}
                 href={voyagerContractURL + offseterAddress}
+            />}
+            { migratorAddress && <ContractLinkComponent
+                title="Migrator address"
+                address={migratorAddress}
+                href={voyagerContractURL + migratorAddress}
             />}
         </>
     )
