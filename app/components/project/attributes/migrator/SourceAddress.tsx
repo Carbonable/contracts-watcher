@@ -1,35 +1,34 @@
 import { useContractRead } from "@starknet-react/core";
-import { num, getChecksumAddress } from "starknet";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
-import { useConfig } from "~/root";
+import { getChecksumAddress, num } from "starknet";
 import { ContractLinkComponent } from "~/components/common/LinkComponent";
+import { useConfig } from "~/root";
 
-export default function CertifierAccount() {
-    const { projectAbi, projectAddress, slot } = useProjectAbis();
+export default function SourceAddress() {
+    const { migratorAbi, migratorAddress } = useProjectAbis();
     const { voyagerContractURL } = useConfig();
 
     const { data, error } = useContractRead({
-        address: projectAddress,
-        abi: projectAbi,
-        functionName: 'get_certifier',
-        args: [slot]
+        address: migratorAddress,
+        abi: migratorAbi,
+        functionName: 'source_address'
     });
 
     if (error) {
         return (
-            <div>Error loading project certifier account...</div>
+            <div>Error loading migrator source address...</div>
         )
     }
 
     if (data === undefined || typeof data !== 'bigint') {
         return (
-            <div>Certifier account is undefined...</div>
+            <div>Migrator source address is undefined...</div>
         )
     }
 
     return (
         <ContractLinkComponent
-            title="Certifier account"
+            title="Source address"
             address={getChecksumAddress(num.toHex(data))}
             href={voyagerContractURL + getChecksumAddress(num.toHex(data))}
         />

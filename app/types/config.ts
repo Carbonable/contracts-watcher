@@ -9,6 +9,7 @@ export type Project = {
     minter: string;
     yielder: string;
     offseter: string;
+    migrator?: string;
 }
 
 export const DECIMALS = 6;

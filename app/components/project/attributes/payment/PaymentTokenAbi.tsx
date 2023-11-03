@@ -1,6 +1,6 @@
 import { useProvider } from "@starknet-react/core";
 import { useEffect, useState } from "react";
-import type { Abi } from "starknet";
+import { type Abi } from "starknet";
 import { fetchAbi } from "~/utils/starknet";
 import PaymentTokenSymbol from "./PaymentTokenSymbol";
 
@@ -10,10 +10,10 @@ export default function PaymentTokenAbi({ address }: { address: string }) {
 
     useEffect(() => {
         async function fetchProjectAbiWrapper() {
-            const abiResult = await fetchAbi(provider, address);
+            let abiResult = await fetchAbi(provider, address);
             setPaymentTokenAbi(abiResult);
-
         }
+
         fetchProjectAbiWrapper();
     }, [provider, address]);
 
@@ -29,5 +29,4 @@ export default function PaymentTokenAbi({ address }: { address: string }) {
             address={address}
         />
     )
-
 }

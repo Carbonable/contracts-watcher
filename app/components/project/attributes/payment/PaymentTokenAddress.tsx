@@ -18,7 +18,7 @@ export default function PaymentTokenAddress({ abi, address }: { abi: Abi, addres
 
     if (data === undefined || typeof data !== 'bigint') {
         return (
-            <div>Min value per tx is undefined...</div>
+            <div>Payment token address is undefined...</div>
         )
     }
 

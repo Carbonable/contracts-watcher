@@ -18,7 +18,7 @@ export default function PaymentTokenSymbol({ abi, address }: { abi: Abi, address
 
     if (data === undefined || typeof data !== 'object') {
         return (
-            <div>Payment token is undefined...</div>
+            <div>Payment token symbol is undefined...</div>
         )
     }
 

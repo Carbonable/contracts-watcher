@@ -14,6 +14,7 @@ import { StarknetProvider } from "./components/starknet/StarknetProvider";
 import Header from "./components/menu/Header";
 import type { Config } from "./types/config";
 import configFile from "./config/config.json";
+import configFileTestnet from "./config/config-testnet.json";
 import { useMemo } from "react";
 import Back from "./components/common/Back";
 
@@ -27,7 +28,7 @@ export const loader: LoaderFunction = async () => {
 
 export default function App() {
   const { defautlNetwork } = useLoaderData();
-  const config = useMemo(() => configFile, []);
+  const config = useMemo(() => defautlNetwork === 'mainnet' ? configFile : configFileTestnet, [defautlNetwork]);
   const projects = config.projects;
 
   const voyagerContractURL = defautlNetwork === 'mainnet' ? 'https://voyager.online/contract/' : 'https://goerli.voyager.online/contract/'

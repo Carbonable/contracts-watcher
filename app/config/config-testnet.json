@@ -1,0 +1,18 @@
+{
+    "projects": [
+        {
+            "slot": "1",
+            "project": "0x052dec7ab6337e136928ab1c6dd8782b0be98d93ebf71c6d1bfd4e4fef806abb",
+            "minter": "0x061815c6879278c4a01c3fe3aed19a9864137885eba0aafc806fc0b873da509b",
+            "yielder": "0x04b52c4aec71e88d94abd537eddbdc3b75e6cc8428eeabea060b3e5335794c0e",
+            "offseter": "0x0315aa0c8035f7a16f68df2b39178679fab9733b68db9c75dd7e19a09e201b98"
+        },
+        {
+            "slot": "2",
+            "project": "0x052dec7ab6337e136928ab1c6dd8782b0be98d93ebf71c6d1bfd4e4fef806abb",
+            "minter": "0x00a142e7cb8d1b01c56b1e255619b6d18dd677d4655fcdd734159a0ba363d407",
+            "yielder": "0x03e0abdf7092404b10c0a0cc49e2b5305ab10000777eebae5eaee4841b2bfcae",
+            "offseter": "0x010f496b0f76071823a3fa875b0380d8a9a6927e6c51f427541052b111eb4043"
+        }
+    ]
+}

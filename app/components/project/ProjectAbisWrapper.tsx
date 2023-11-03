@@ -9,10 +9,12 @@ type ProjectAbiContextType = {
     minterAbi?: Abi,
     yielderAbi?: Abi,
     offseterAbi?: Abi,
+    migratorAbi?: Abi,
     projectAddress: string,
     minterAddress?: string,
     yielderAddress?: string,
-    offseterAddress?: string
+    offseterAddress?: string,
+    migratorAddress?: string,
     slot: string
 }
 
@@ -25,11 +27,13 @@ export default function ProjectAbisWrapper({ children, projectAddress, slot }: {
     const minterAddress = useMemo(() => projects.find((project) => project.project === projectAddress)?.minter, [projects, projectAddress]);
     const yielderAddress = useMemo(() => projects.find((project) => project.project === projectAddress)?.yielder, [projects, projectAddress]);
     const offseterAddress = useMemo(() => projects.find((project) => project.project === projectAddress)?.offseter, [projects, projectAddress]);
+    const migratorAddress = useMemo(() => projects.find((project) => project.project === projectAddress)?.migrator, [projects, projectAddress]);
 
     const [projectAbi, setProjectAbi] = useState<Abi|undefined>(undefined);
     const [minterAbi, setMinterAbi] = useState<Abi|undefined>(undefined);
     const [yielderAbi, setYielderAbi] = useState<Abi|undefined>(undefined);
     const [offseterAbi, setOffseterAbi] = useState<Abi|undefined>(undefined);
+    const [migratorAbi, setMigratorAbi] = useState<Abi|undefined>(undefined);
     
     useEffect(() => {
         async function fetchProjectAbiWrapper() {
@@ -55,8 +59,8 @@ export default function ProjectAbisWrapper({ children, projectAddress, slot }: {
         async function fetchYielderAbiWrapper() {
 
             if (yielderAddress !== undefined) {
-                const minterAbiResult = await fetchAbi(provider, yielderAddress);
-                setYielderAbi(minterAbiResult);
+                const yielderAbiResult = await fetchAbi(provider, yielderAddress);
+                setYielderAbi(yielderAbiResult);
             }
         }
         fetchYielderAbiWrapper();
@@ -66,19 +70,30 @@ export default function ProjectAbisWrapper({ children, projectAddress, slot }: {
         async function fetchOffseterAbiWrapper() {
 
             if (offseterAddress !== undefined) {
-                const minterAbiResult = await fetchAbi(provider, offseterAddress);
-                setOffseterAbi(minterAbiResult);
+                const offseterAbiResult = await fetchAbi(provider, offseterAddress);
+                setOffseterAbi(offseterAbiResult);
             }
         }
         fetchOffseterAbiWrapper();
     }, [provider, offseterAddress]);
+
+    useEffect(() => {
+        async function fetchMigratorAbiWrapper() {
+
+            if (migratorAddress !== undefined) {
+                const migratorAbiResult = await fetchAbi(provider, migratorAddress);
+                setMigratorAbi(migratorAbiResult);
+            }
+        }
+        fetchMigratorAbiWrapper();
+    }, [provider, migratorAddress]);
 
 
     if (projectAbi === undefined) { return null; }
 
     return (
         <ProjectAbiContext.Provider 
-            value={{ projectAbi, minterAbi, yielderAbi, offseterAbi, projectAddress, minterAddress, yielderAddress, offseterAddress, slot }}
+            value={{ projectAbi, minterAbi, yielderAbi, offseterAbi, migratorAbi, projectAddress, minterAddress, yielderAddress, offseterAddress, migratorAddress, slot }}
         >
             { children }
         </ProjectAbiContext.Provider>
