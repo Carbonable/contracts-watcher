@@ -54,6 +54,7 @@ Now you'll need to pick a host to deploy it to.
 NETWORK=testnet|mainnet
 RPC=https://rpc.nethermind.io/goerli-juno/|https://rpc.nethermind.io/mainnet-juno/
 RPC_API_KEY="your-api-key"
+DISPLAY_APR=true|false
 ```
 
 ## License

@@ -1,6 +1,7 @@
 export type Config = {
     projects: Project[];
     voyagerContractURL: string;
+    displayAPR: boolean;
 }
 
 export type Project = {

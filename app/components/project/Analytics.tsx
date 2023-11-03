@@ -4,9 +4,11 @@ import SellPricesCurve from './analytics/SellPriceCurve';
 import CumulativeSaleCurve from './analytics/CumulativeSaleCurve';
 import UpdatedPriceCurve from './analytics/UpdatedPriceCurve';
 import APRCurve from './analytics/APRCurve';
+import { useConfig } from '~/root';
 
 export default function Analytics() {
     const { projectAbi, yielderAbi } = useProjectAbis();
+    const { displayAPR } = useConfig();
 
     if (!projectAbi || !yielderAbi) {
         return (
@@ -20,7 +22,7 @@ export default function Analytics() {
             <SellPricesCurve />
             <UpdatedPriceCurve />
             <CumulativeSaleCurve />
-            <APRCurve />
+            { displayAPR && <APRCurve /> }
         </>
     )
 }

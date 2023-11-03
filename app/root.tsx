@@ -21,13 +21,14 @@ import Back from "./components/common/Back";
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export const loader: LoaderFunction = async () => {
-    const defautlNetwork = process.env.NETWORK
+    const defautlNetwork = process.env.NETWORK;
+    const displayAPR = process.env.DISPLAY_APR;
 
-    return json({ defautlNetwork });
+    return json({ defautlNetwork, displayAPR });
 };
 
 export default function App() {
-  const { defautlNetwork } = useLoaderData();
+  const { defautlNetwork, displayAPR } = useLoaderData();
   const config = useMemo(() => defautlNetwork === 'mainnet' ? configFile : configFileTestnet, [defautlNetwork]);
   const projects = config.projects;
 
@@ -51,7 +52,7 @@ export default function App() {
           </header>
           <main className="px-4 py-8 md:px-8 mt-[80px] relative w-screen mx-auto 2xl:max-w-6xl font-inter">
             <Back />
-            <Outlet context={{ projects, voyagerContractURL }} />
+            <Outlet context={{ projects, voyagerContractURL, displayAPR }} />
           </main>
           <ScrollRestoration />
           <Scripts />
