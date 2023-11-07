@@ -52,7 +52,7 @@ export default function UpdatedPriceCurve() {
         const lastPriceTime = new Date(Number(priceTimes[priceTimes.length - 1]) * 1000);
 
         updatedPrices.map(shortString.decodeShortString).join('');
-        const filteredUpdatedPrices = updatedPrices.filter(price => price !== '0x0');
+        const filteredUpdatedPrices = updatedPrices.filter((price, i) => i % 2 === 0);
 
         const data = updatedTimes.map((time, i) => {
             const currentTime = new Date(Number(time) * 1000);

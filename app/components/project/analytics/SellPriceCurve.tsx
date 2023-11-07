@@ -43,7 +43,7 @@ export default function SellPricesCurve() {
         const times = (timesData as Array<string>).slice(1);
 
         sellPrices.map(shortString.decodeShortString).join('');
-        const filteredSellPrices = sellPrices.filter(price => price !== '0x0');
+        const filteredSellPrices = sellPrices.filter((price, i) => i % 2 === 0);
 
         const data = times.map((time, i) => {
             return {

@@ -51,7 +51,7 @@ export default function CumulativeSaleCurve() {
         const times = (cumSaleTimesData as Array<string>).slice(1);
 
         cumSale.map(shortString.decodeShortString).join('');
-        const filteredCumSale = cumSale.filter((price, i) => price !== '0x0' || i === 0);
+        const filteredCumSale = cumSale.filter((price, i) => i % 2 === 0);
         const priceTimes = (priceTimesData as Array<string>).slice(1);
         const lastPriceTime = new Date(Number(priceTimes[priceTimes.length - 1]) * 1000);
 
