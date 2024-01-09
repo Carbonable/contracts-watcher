@@ -4,8 +4,8 @@
             "slot": "1",
             "project": "0x0516d0acb6341dcc567e85dc90c8f64e0c33d3daba0a310157d6bba0656c8769",
             "minter": "0x065ff26209e5b2089e84488568ca84d7981d95f2ccb77f2f39878c4ab98e96cc",
-            "yielder": "0x01d00962e14dfd789b32e5cb5eddcc8ec3904d8724ac9ae5fbd289254a7a714e",
-            "offseter": "0x04429528b8870d1a0757cb016da6a40410a53bb501c5679383d66119eb8bbd85",
+            "yielder": "0x03d25473be5a6316f351e8f964d0c303357c006f7107779f648d9879b7c6d58a",
+            "offseter": "0x0324b531f731100b494e2f978a26b20b5870585dd96d9f1166b43a28ebbb8aba",
             "migrator": "0x009bae24da785585f412dc16282d22fe86473750e5f99e0bda30a78aa262a3b5",
             "old_nft": "0x0687acd1aa9dca381b305dcc7dfe1b8550fca9d2d7f81c9947c14a14149e9ef4"
         },
@@ -13,8 +13,8 @@
             "slot": "2",
             "project": "0x0516d0acb6341dcc567e85dc90c8f64e0c33d3daba0a310157d6bba0656c8769",
             "minter": "0x04673097fab74b77264c05982cd1ee6afaa2ee81787851c3cb47a3ab70357212",
-            "yielder": "0x030172515f274abe1a5938108f083fc7da90481933e34458f0352eebea32560d",
-            "offseter": "0x04774636985a87ae06f9eab5d7d25fb75ef8be0e04fe3444b0277bad17465e51",
+            "yielder": "0x00426d4e86913759bcc49b7f992b1fe62e6571e8f8089c23d95fea815dbad471",
+            "offseter": "0x022f40128af9798a0b734874fd993bbab6cf75845f26f844cb151b7041132c6d",
             "migrator": "0x019c624eab3bebbc8a37ed90ee8582a606103792caffc91e9939af027175fa7d",
             "old_nft": "0x0687acd1aa9dca381b305dcc7dfe1b8550fca9d2d7f81c9947c14a14149e9ef4"
         }

@@ -23,12 +23,13 @@ export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 export const loader: LoaderFunction = async () => {
     const defautlNetwork = process.env.NETWORK;
     const displayAPR = process.env.DISPLAY_APR;
+    const rpcApiKey = process.env.RPC_API_KEY;
 
-    return json({ defautlNetwork, displayAPR });
+    return json({ defautlNetwork, displayAPR, rpcApiKey });
 };
 
 export default function App() {
-  const { defautlNetwork, displayAPR } = useLoaderData();
+  const { defautlNetwork, displayAPR, rpcApiKey } = useLoaderData();
   const config = useMemo(() => defautlNetwork === 'mainnet' ? configFile : configFileTestnet, [defautlNetwork]);
   const projects = config.projects;
 
@@ -46,7 +47,7 @@ export default function App() {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"></link>
       </head>
       <body className="bg-neutral-800 text-neutral-100">
-        <StarknetProvider defautlNetwork={defautlNetwork}  >
+        <StarknetProvider defautlNetwork={defautlNetwork} rpcApiKey={rpcApiKey} >
           <header className="fixed top-0 w-full z-50">
             <Header />
           </header>

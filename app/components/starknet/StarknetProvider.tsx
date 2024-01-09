@@ -1,33 +1,28 @@
-import { StarknetConfig, argent, braavos, jsonRpcProvider } from "@starknet-react/core";
-import { goerli, mainnet } from "@starknet-react/chains";
+import { StarknetConfig, argent, braavos, nethermindProvider } from "@starknet-react/core";
+import { mainnet, sepolia } from "@starknet-react/chains";
 import { useMemo } from "react";
 
-export function StarknetProvider({ children, defautlNetwork }: { children: React.ReactNode, defautlNetwork: string }) {
-    const chains = useMemo(() => {
-        if (defautlNetwork === 'mainnet') {
-          return [mainnet];
-        }
+export function StarknetProvider({ children, defautlNetwork, rpcApiKey }: { children: React.ReactNode, defautlNetwork: string, rpcApiKey: string }) {
 
-        return [goerli]
-      }, [defautlNetwork]);
-
-      function rpc() {
-        return {
-          http: 'http://localhost:3000/api'
-        }
+  const chains = useMemo(() => {
+      if (defautlNetwork === 'mainnet') {
+        return [mainnet];
       }
-    
-      const providers = [jsonRpcProvider({ rpc })];
-      const connectors = useMemo(() => [braavos(), argent()], []);
+
+      return [sepolia]
+    }, [defautlNetwork]);
   
-    return (
-      <StarknetConfig
-        chains={chains}
-        providers={providers}
-        connectors={connectors}
-        autoConnect={true}
-      >
-        {children}
-      </StarknetConfig>
-    );
-  }
+    const provider = nethermindProvider({ apiKey: rpcApiKey });
+    const connectors = useMemo(() => [braavos(), argent()], []);
+
+  return (
+    <StarknetConfig
+      chains={chains}
+      provider={provider}
+      connectors={connectors}
+      autoConnect={true}
+    >
+      {children}
+    </StarknetConfig>
+  );
+}

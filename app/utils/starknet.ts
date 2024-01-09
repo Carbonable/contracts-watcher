@@ -11,6 +11,7 @@ export async function fetchAbi(provider: any, address: string) {
             return undefined;
         }
     }
+
     const abiResult = result.abi;
     const isProxy = abiResult.some((func: any) => (func.name === '__default__'));
 
