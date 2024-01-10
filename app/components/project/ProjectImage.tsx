@@ -5,7 +5,7 @@ import { useSlotURI } from "./SlotURI";
 export default function ProjectImage() {
     const slotURI = useSlotURI();
     const id = slotURI.name.toString().toLowerCase().replace(' ', '_');
-    const image = slotURI.image;
+    const image = slotURI.image.replaceAll('%23', '#');
 
     useEffect(() => {
         // Function to modify SVGs

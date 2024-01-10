@@ -2,17 +2,18 @@
     "projects": [
         {
             "slot": "1",
-            "project": "0x052dec7ab6337e136928ab1c6dd8782b0be98d93ebf71c6d1bfd4e4fef806abb",
-            "minter": "0x061815c6879278c4a01c3fe3aed19a9864137885eba0aafc806fc0b873da509b",
-            "yielder": "0x04b52c4aec71e88d94abd537eddbdc3b75e6cc8428eeabea060b3e5335794c0e",
-            "offseter": "0x0315aa0c8035f7a16f68df2b39178679fab9733b68db9c75dd7e19a09e201b98"
+            "project": "0x03fc529d665451441797c14ae10f631d6652ccda2e29af4efb23e91ec5ef07da",
+            "minter": "0x06c1c09fe078a34b9d043396fd1d8494bad934bccb545f1302fcb2d6faa3b630",
+            "yielder": "0x00f6019754ab54ea7d806720d17b425c799db5ebb337e4b2d8c1ed71fc35f342",
+            "offseter": "0x008637332b17f5ffe7f21f076389e8a5461f25fbc0049ac0243b4e08591280df",
+            "migrator": "0x00ab247596af04fb1f6e6b04511bf2ee4c92d4fa75502ef669e565a9686a7028"
         },
         {
             "slot": "2",
-            "project": "0x052dec7ab6337e136928ab1c6dd8782b0be98d93ebf71c6d1bfd4e4fef806abb",
-            "minter": "0x00a142e7cb8d1b01c56b1e255619b6d18dd677d4655fcdd734159a0ba363d407",
-            "yielder": "0x03e0abdf7092404b10c0a0cc49e2b5305ab10000777eebae5eaee4841b2bfcae",
-            "offseter": "0x010f496b0f76071823a3fa875b0380d8a9a6927e6c51f427541052b111eb4043"
+            "project": "0x02a3115cac541dbface5dc0ab2034c87d91488844d4a3d0e52bae672737085bb",
+            "minter": "0x04c9c5303f0c0f40cdfd5f5631052288185e37abe3af54de9c37610b423b1b25",
+            "yielder": "0x0370e85e8f315dc352eeef7e7f0f5d70e89c699384cbcb81a11a7089fa87ff66",
+            "offseter": "0x04f634a74451bc19e4d537326dff7552c225040e9d9c16b26a32466eebdf9688"
         }
     ]
 }
