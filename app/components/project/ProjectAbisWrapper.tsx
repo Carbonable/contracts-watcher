@@ -1,7 +1,7 @@
 import { useProvider } from "@starknet-react/core";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { Abi } from "starknet";
-import { useConfig } from "~/root";
+import type { Project } from "~/types/config";
 import { fetchAbi } from "~/utils/starknet";
 
 type ProjectAbiContextType = {
@@ -21,15 +21,14 @@ type ProjectAbiContextType = {
 
 const ProjectAbiContext = createContext<ProjectAbiContextType>({} as ProjectAbiContextType);
 
-export default function ProjectAbisWrapper({ children, projectAddress, slot }: { children: React.ReactNode, projectAddress: string, slot: string }) {
+export default function ProjectAbisWrapper({ children, project }: { children: React.ReactNode, project: Project }) {
     const { provider } = useProvider();
-    const { projects } = useConfig();
 
-    const minterAddress = useMemo(() => projects.find((project) => project.slot === slot)?.minter, [projects, slot]);
-    const yielderAddress = useMemo(() => projects.find((project) => project.slot === slot)?.yielder, [projects, slot]);
-    const offseterAddress = useMemo(() => projects.find((project) => project.slot === slot)?.offseter, [projects, slot]);
-    const migratorAddress = useMemo(() => projects.find((project) => project.slot === slot)?.migrator, [projects, slot]);
-    const oldNFTAddress = useMemo(() => projects.find((project) => project.slot === slot)?.old_nft, [projects, slot]);
+    const minterAddress = useMemo(() => project.minter, [project]);
+    const yielderAddress = useMemo(() => project.yielder, [project]);
+    const offseterAddress = useMemo(() => project.offseter, [project]);
+    const migratorAddress = useMemo(() => project.migrator, [project]);
+    const oldNFTAddress = useMemo(() => project.old_nft, [project]);
 
     const [projectAbi, setProjectAbi] = useState<Abi|undefined>(undefined);
     const [minterAbi, setMinterAbi] = useState<Abi|undefined>(undefined);
@@ -39,12 +38,12 @@ export default function ProjectAbisWrapper({ children, projectAddress, slot }: {
     
     useEffect(() => {
         async function fetchProjectAbiWrapper() {
-            const projectAbiResult = await fetchAbi(provider, projectAddress);
+            const projectAbiResult = await fetchAbi(provider, project.project);
             setProjectAbi(projectAbiResult);
 
         }
         fetchProjectAbiWrapper();
-    }, [provider, projectAddress]);
+    }, [provider, project.project]);
 
     useEffect(() => {
         async function fetchMinterAbiWrapper() {
@@ -95,7 +94,7 @@ export default function ProjectAbisWrapper({ children, projectAddress, slot }: {
 
     return (
         <ProjectAbiContext.Provider 
-            value={{ projectAbi, minterAbi, yielderAbi, offseterAbi, migratorAbi, projectAddress, minterAddress, yielderAddress, offseterAddress, migratorAddress, oldNFTAddress, slot }}
+            value={{ projectAbi, minterAbi, yielderAbi, offseterAbi, migratorAbi, projectAddress: project.project, minterAddress, yielderAddress, offseterAddress, migratorAddress, oldNFTAddress, slot:project.slot }}
         >
             { children }
         </ProjectAbiContext.Provider>

@@ -1,36 +1,27 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import ProjectImage from "~/components/project/ProjectImage";
-import ProjectAbisWrapper from "~/components/project/ProjectAbisWrapper";
-import SlotURIWrapper from "~/components/project/SlotURI";
+import Card from "~/components/collection/Card";
 import { useConfig } from "~/root";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Carbonable Smart Contracts Watcher" },
-    { name: "description", content: "Monitor Carbonable Smart Contracts" },
+    { title: "RWA Smart Contracts Watcher" },
+    { name: "description", content: "Monitor Real World Assets Smart Contracts" },
   ];
 };
 
 export default function Index() {
-  const { projects } = useConfig();
+    const { config } = useConfig();
+    const collections = config.collections;
 
     return (
         <>
-            <h1 className="text-2xl uppercase font-bold">Projects</h1>
+            <h1 className="text-2xl uppercase font-bold">Collections</h1>
             <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {projects.map((project, index) => (
-                    <ProjectAbisWrapper 
-                        key={`abi_${project.slot}_${index}`} 
-                        projectAddress={project.project}
-                        slot={project.slot}
-                    >
-                        <Link to={`/projects/${project.project}/${project.slot}`} className="hover:brightness-110">
-                            <SlotURIWrapper>
-                                <ProjectImage />
-                            </SlotURIWrapper>
-                        </Link>
-                    </ProjectAbisWrapper>
+                {collections.map((collection) => (
+                    <Link to={`/collections/${collection.id}`} className="hover:brightness-110" key={collection.id}>
+                        <Card collectionId={collection.id} />
+                    </Link>
                 ))}
             </div>
         </>

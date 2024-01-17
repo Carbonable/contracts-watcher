@@ -30,7 +30,6 @@ export default function MinValuePerTx() {
         <LabelComponent
             title={title}
             value={(bigIntToNumber(data) * Math.pow(10, -DECIMALS)).toString()}
-
         />
     )
 }

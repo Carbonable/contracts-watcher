@@ -1,7 +1,19 @@
 export type Config = {
-    projects: Project[];
+    config: ConfigFile;
     voyagerContractURL: string;
     displayAPR: boolean;
+    isPublic: boolean;
+}
+
+export type ConfigFile = {
+    collections: Collection[];
+}
+
+export type Collection = {
+    id: string;
+    name: string;
+    logo: string;
+    projects: Project[];
 }
 
 export type Project = {

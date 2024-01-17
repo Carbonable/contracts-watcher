@@ -9,20 +9,35 @@ import { Title } from "~/components/common/Title";
 import ContractsTabs from "~/components/project/ContractsTabs";
 import Analytics from "~/components/project/Analytics";
 import MigrationStatusWrapper from "~/components/project/MigrationStatusWrapper";
+import type { Collection, ConfigFile } from "~/types/config";
+import { useConfig } from "~/root";
 
 export async function loader({params}: LoaderFunctionArgs) {
-    return json({ project_address: params.project, slot: params.slot });
+    return json({ project_address: params.project, slot: params.slot, collectionId: params.collection });
+}
+
+type LoaderDataProps = {
+    project_address: string;
+    collectionId: string;
+    slot: string;
 }
 
 export default function Index() {
-    const { project_address, slot } = useLoaderData();
+    const { project_address, slot, collectionId } = useLoaderData() as LoaderDataProps;
+    const { config } = useConfig() as { config: ConfigFile };
+    const collections = config.collections;
+    const collection: Collection | undefined = collections.find((collection: Collection) => collection.id === collectionId);
+    const project = collection?.projects.find((project) => project.project === project_address && project.slot === slot);
+
+    if (!project) {
+        return null;
+    }
 
     return (
         <>  
             <ProjectAbisWrapper 
                 key={`abi_${slot}`} 
-                projectAddress={project_address}
-                slot={slot}
+                project={project}
             >
                 <SlotURIWrapper>
                     <div className="w-full flex flex-wrap">

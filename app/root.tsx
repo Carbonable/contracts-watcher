@@ -24,14 +24,14 @@ export const loader: LoaderFunction = async () => {
     const defautlNetwork = process.env.NETWORK;
     const displayAPR = process.env.DISPLAY_APR;
     const rpcApiKey = process.env.RPC_API_KEY;
+    const isPublic = process.env.IS_PUBLIC;
 
-    return json({ defautlNetwork, displayAPR, rpcApiKey });
+    return json({ defautlNetwork, displayAPR, rpcApiKey, isPublic });
 };
 
 export default function App() {
-  const { defautlNetwork, displayAPR, rpcApiKey } = useLoaderData();
+  const { defautlNetwork, displayAPR, rpcApiKey, isPublic } = useLoaderData();
   const config = useMemo(() => defautlNetwork === 'mainnet' ? configFile : configFileTestnet, [defautlNetwork]);
-  const projects = config.projects;
 
   const voyagerContractURL = defautlNetwork === 'mainnet' ? 'https://voyager.online/contract/' : 'https://goerli.voyager.online/contract/'
 
@@ -53,7 +53,7 @@ export default function App() {
           </header>
           <main className="px-4 py-8 md:px-8 mt-[80px] relative w-screen mx-auto 2xl:max-w-6xl font-inter">
             <Back />
-            <Outlet context={{ projects, voyagerContractURL, displayAPR }} />
+            <Outlet context={{ config, voyagerContractURL, displayAPR, isPublic }} />
           </main>
           <ScrollRestoration />
           <Scripts />
