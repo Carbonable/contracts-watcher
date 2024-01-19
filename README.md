@@ -52,9 +52,10 @@ Now you'll need to pick a host to deploy it to.
 ## .env
 ```sh
 NETWORK=testnet|mainnet
-RPC=https://rpc.nethermind.io/goerli-juno/|https://rpc.nethermind.io/mainnet-juno/
+RPC=https://rpc.nethermind.io/goerli-juno/|https://rpc.nethermind.io/mainnet-juno/|https://rpc.nethermind.io/sepolia-juno/
 RPC_API_KEY="your-api-key"
 DISPLAY_APR=true|false
+IS_PUBLIC=true|false
 ```
 
 ## License

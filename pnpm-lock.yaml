@@ -24,11 +24,11 @@ dependencies:
     specifier: ^2.0.1
     version: 2.0.1(typescript@5.2.2)
   '@starknet-react/chains':
-    specifier: ^0.1.3
-    version: 0.1.4
+    specifier: ^0.1.5
+    version: 0.1.5
   '@starknet-react/core':
-    specifier: ^2.1.5
-    version: 2.2.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@5.25.0)
+    specifier: ^2.2.2
+    version: 2.2.2(get-starknet-core@3.2.0)(react@18.2.0)(starknet@5.25.0)
   '@svgdotjs/svg.js':
     specifier: ^3.2.0
     version: 3.2.0
@@ -1633,18 +1633,18 @@ packages:
       '@noble/hashes': 1.3.3
     dev: false
 
-  /@starknet-react/chains@0.1.4:
-    resolution: {integrity: sha512-EPArCYy5xjNRZ+b2gE+Ur81LFqNLBfGk3y9nQpSvc5S3fdUcmtEM2vdTextW8Hn/z2aTY0vMJUcr6/bTjOAEqw==}
+  /@starknet-react/chains@0.1.5:
+    resolution: {integrity: sha512-F+K3ghgX9nr/BQm6bv71mQC/Ks7iPEoNYwrjv6LA1u3sYjvmz2mAwHfiGLvBYxTTDvWK0qHm9HACGoBJl8oTYQ==}
     dev: false
 
-  /@starknet-react/core@2.2.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@5.25.0):
-    resolution: {integrity: sha512-F4niMZt/bXmLC1C3mxlj+uNVcBLoW4eHAvGHHRyE/l+Y+il4lcqYFWzeT/n7uzLviampmurZDrYdq3zr3iLVyA==}
+  /@starknet-react/core@2.2.2(get-starknet-core@3.2.0)(react@18.2.0)(starknet@5.25.0):
+    resolution: {integrity: sha512-mL9jLLPju3w2a0nRx3c8H14xFi+xAhbK47ZDhKW7cbGtSkQxq+9OT2HW8OqmMzC9vZDs4hu/0iWjr/0lYKVgIg==}
     peerDependencies:
       get-starknet-core: ^3.2.0
       react: ^18.0
       starknet: ^5.25.0
     dependencies:
-      '@starknet-react/chains': 0.1.4
+      '@starknet-react/chains': 0.1.5
       '@tanstack/react-query': 5.17.9(react@18.2.0)
       eventemitter3: 5.0.1
       get-starknet-core: 3.2.0(starknet@5.25.0)
