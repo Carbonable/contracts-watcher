@@ -13,7 +13,7 @@ export default function MaxSale() {
         functionName: 'get_max_sale'
     });
 
-    const title = "Max sale";
+    const title = "Theoretical max sale since inception";
 
     if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
         return (
@@ -28,8 +28,7 @@ export default function MaxSale() {
     return (
         <LabelComponent
             title={title}
-            value={`${(bigIntToNumber(data) * Math.pow(10, -DECIMALS)).toString()}`}
-
+            value={`$${(bigIntToNumber(data) * Math.pow(10, -DECIMALS)).toString()}`}
         />
     )
 }

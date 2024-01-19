@@ -1,3 +1,4 @@
+import { useConfig } from "~/root";
 import CertifierAccount from "./project/CertifierAccount";
 import Name from "./project/Name";
 import ProjectValue from "./project/ProjectValue";
@@ -7,14 +8,26 @@ import TotalValue from "./project/TotalValue";
 import ValueDecimals from "./project/ValueDecimals";
 
 export default function Project() {
+    const { isPublic } = useConfig();
+
+    if (isPublic) {
+        return  (
+            <>
+                <Symbol />
+                <ProjectValue />
+                <TotalValue />
+            </>
+        )
+    }
+
     return (
         <>
             <Name />
             <Symbol />
             <ValueDecimals />
             <TokenSupply />
-            <TotalValue />
             <ProjectValue />
+            <TotalValue />
             <CertifierAccount />
         </>
     )

@@ -6,7 +6,7 @@ import { useConfig } from "~/root";
 export const meta: MetaFunction = () => {
   return [
     { title: "RWA Smart Contracts Watcher" },
-    { name: "description", content: "Monitor Real World Assets Smart Contracts" },
+    { name: "description", content: "Monitor Real World Assets Smart Contracts on Starknet" },
   ];
 };
 

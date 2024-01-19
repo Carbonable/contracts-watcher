@@ -15,7 +15,7 @@ export default function TotalValue() {
         args: [slot]
     });
 
-    const title = "Total value";
+    const title = "Total minted value";
 
     if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
         return (

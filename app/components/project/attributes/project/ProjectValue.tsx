@@ -15,7 +15,7 @@ export default function ProjectValue() {
         args: [slot]
     });
 
-    const title = "Poject value";
+    const title = "Project value";
 
     if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
         return (

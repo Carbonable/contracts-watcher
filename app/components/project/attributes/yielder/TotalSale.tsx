@@ -13,7 +13,7 @@ export default function TotalSale() {
         functionName: 'get_total_sale'
     });
 
-    const title = "Total sale";
+    const title = "Total sale since inception";
 
     if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
         return (
@@ -30,7 +30,6 @@ export default function TotalSale() {
         <LabelComponent
             title={title}
             value={`$${(bigIntToNumber(data) * Math.pow(10, -DECIMALS)).toString()}`}
-
         />
     )
 }

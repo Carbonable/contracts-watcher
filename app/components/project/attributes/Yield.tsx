@@ -1,3 +1,4 @@
+import { useConfig } from "~/root";
 import { useProjectAbis } from "../ProjectAbisWrapper";
 import PaymentTokenAddress from "./payment/PaymentTokenAddress";
 import APR from "./yielder/APR";
@@ -12,6 +13,7 @@ import TotalSale from "./yielder/TotalSale";
 
 export default function Yield() {
     const { yielderAbi, yielderAddress, minterAddress } = useProjectAbis();
+    const { isPublic } = useConfig();
 
     return (
         <>
@@ -27,7 +29,7 @@ export default function Yield() {
                     address={yielderAddress}
                 />
             }
-            { minterAddress &&
+            { !isPublic && minterAddress &&
                 <APR minterAddress={minterAddress} />
             }
             <TotalClaimable />
