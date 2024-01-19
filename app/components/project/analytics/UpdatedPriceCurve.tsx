@@ -60,7 +60,7 @@ export default function UpdatedPriceCurve() {
                 <div className="px-8 pt-4 pb-4 bg-neutral-700/90 border border-neutral-500 font-inter rounded-xl">
                     <p className="text-center uppercase bold text-neutral-100">{label}</p>
                     <p className="text-left text-orange-dark mt-2">Updated price: ${Number(payload[0].value).toFixed(2)}</p>
-                    <p className="text-left text-orange-dark">Future updated price: ${Number(payload[payload.length -1].value).toFixed(2)}</p>
+                    <p className="text-left text-orange-dark">Project buying price: ${Number(payload[payload.length -1].value).toFixed(2)}</p>
                 </div>
             );
         }
