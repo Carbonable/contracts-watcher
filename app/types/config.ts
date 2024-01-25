@@ -43,3 +43,4 @@ export type Value = {
 
 export const DECIMALS = 6;
 export const SECONDS_PER_YEAR = 31556925;
+export const FEES: number = 0.85;

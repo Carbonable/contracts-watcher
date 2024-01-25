@@ -1,16 +1,19 @@
 import { useContractRead } from "@starknet-react/core";
 import { useEffect, useState } from "react";
-import { Area, ComposedChart, Label, LabelList, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, ComposedChart, Label, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useProjectAbis } from "../ProjectAbisWrapper";
 import { shortString } from "starknet";
 import { Subtitle } from "~/components/common/Title";
 import { bigIntToNumber } from "~/utils/starknet";
-import { DECIMALS, FEES } from "~/types/config";
+import { DECIMALS } from "~/types/config";
+import type { Forecast, Value } from "~/types/config";
+import { useConfig } from "~/root";
 import { CustomLegend } from "~/components/common/CustomGraphLegend";
 
 export default function UpdatedPriceCurve() {
     const { yielderAbi, yielderAddress, projectAbi, projectAddress, slot } = useProjectAbis();
     const [graphData, setGraphData] = useState([{}]);
+    const { forecast } = useConfig();
 
     const { data: updatedPriceData, isLoading: isLoadingUpdatedPrices, error: errorUpdatedPrices } = useContractRead({
         address: yielderAddress,
@@ -56,16 +59,22 @@ export default function UpdatedPriceCurve() {
 
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
+            console.log(payload);
             const updatedPrice = payload.filter((price: any) => price.dataKey === "updatedPrice")[0]?.value ?? null;
+            const futureUpdatedPrice = payload.filter((price: any) => price.dataKey === "futureUpdatedPrice")[0]?.value ?? null;
             const buyingPricePerTon = payload.filter((price: any) => price.dataKey === "buyingPricePerTon")[0]?.value ?? null;
-            const performance = updatedPrice && Number(updatedPrice) > 0 ? (Number(updatedPrice) / Number(buyingPricePerTon)).toFixed(1) : null;
+            const worstPrice = payload.filter((price: any) => price.dataKey === "worstPrice")[0]?.value ?? null;
+            const basePrice = payload.filter((price: any) => price.dataKey === "basePrice")[0]?.value ?? null;
+            const bestPrice = payload.filter((price: any) => price.dataKey === "bestPrice")[0]?.value ?? null;
 
             return (
                 <div className="px-8 pt-4 pb-4 bg-neutral-700/90 border border-neutral-500 font-inter rounded-xl">
                     <p className="text-center uppercase bold text-neutral-100">{label}</p>
-                    <p className="text-left text-neutral-100 mt-2">Updated price: {updatedPrice ? Number(updatedPrice) > 0 ? "$" + Number(updatedPrice) : "Not sold" : "TBD"}</p>
-                    <p className="text-left text-neutral-100 mt-2">Project buying price: ${Number(buyingPricePerTon).toFixed(2)}</p>
-                    { performance && <p className="text-left text-greenish-500 mt-2">Performance: x{performance} </p> }
+                    <p className="text-left text-orange-dark mt-2">Updated price: ${Number(updatedPrice ? updatedPrice : futureUpdatedPrice).toFixed(2)}</p>
+                    <p className="text-left text-[#787675] mt-2">Worst forecast: ${Number(worstPrice).toFixed(2) ?? "no price"}</p>
+                    <p className="text-left text-[#AAC6FD] mt-2">Base forecast: ${Number(basePrice).toFixed(2) ?? "no price"}</p>
+                    <p className="text-left text-[#0AF2AD] mt-2">Best forecast: ${Number(bestPrice).toFixed(2) ?? "no price"}</p>
+                    <p className="text-left text-[#F97316] mt-2">Project buying price: ${Number(buyingPricePerTon).toFixed(2)}</p>
                 </div>
             );
         }
@@ -73,32 +82,26 @@ export default function UpdatedPriceCurve() {
         return null;
     };
 
-    const renderCustomizedLabel = (props: any) => {
-        console.log(props);
-        const { x, y, value, index } = props;
-        const radius = 16;
-        const width = 0;
-
-        if (value === null || index % 2 === 0) { return null; }
-      
-        return (
-          <g>
-            <circle cx={x + width / 2} cy={y - radius - 10} r={radius} fill="#29A46F" />
-            <text x={x + width / 2} y={y - radius - 10} fill="#fff" textAnchor="middle" dominantBaseline="middle" fontSize={10}>
-                x{value}
-            </text>
-          </g>
-        );
-      };
-
     const [legendPayload] = useState([
         {
             name: "Sell price",
-            color: "#29A46F",
+            color: "#877B44",
         },
         {
             name: 'Buying Price Per Ton',
             color: "#F97316",
+        },
+        {
+            name: 'Worst forecast',
+            color: "#787675",
+        },
+        {
+            name: "Base forecast",
+            color: "#AAC6FD",
+        },
+        {
+            name: "Best forecast",
+            color: "#0AF2AD",
         }
     ]);   
 
@@ -112,7 +115,8 @@ export default function UpdatedPriceCurve() {
             tonEquivalentData === undefined ||
             typeof tonEquivalentData !== 'bigint' ||
             finalAbsorptionData === undefined ||
-            typeof finalAbsorptionData !== 'bigint'
+            typeof finalAbsorptionData !== 'bigint' ||
+            forecast === undefined
         ) { return; }
 
         const updatedPrices = (updatedPriceData as Array<string>).slice(1);
@@ -120,6 +124,9 @@ export default function UpdatedPriceCurve() {
         const priceTimes = (priceTimesData as Array<string>).slice(1);
         const lastPriceTime = new Date(Number(priceTimes[priceTimes.length - 1]) * 1000);
         const buyingPricePerTon = ((bigIntToNumber(projectValueData) * bigIntToNumber(tonEquivalentData)) / bigIntToNumber(finalAbsorptionData)) * Math.pow(10, -DECIMALS);
+        const worst = forecast.forecast.filter((prices: Forecast) => prices.type === "worst")[0];
+        const base = forecast.forecast.filter((prices: Forecast) => prices.type === "base")[0]; 
+        const best = forecast.forecast.filter((prices: Forecast) => prices.type === "best")[0];
 
         updatedPrices.map(shortString.decodeShortString).join('');
         const filteredUpdatedPrices = updatedPrices.filter((price, i) => i % 2 === 0);
@@ -127,19 +134,24 @@ export default function UpdatedPriceCurve() {
         const data = updatedTimes.map((updatedTime, i) => {
             const currentTime = new Date(Number(updatedTime) * 1000);
             const time = new Date(Number(updatedTime) * 1000).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            const updatedPrice = currentTime <= lastPriceTime ? (Number(filteredUpdatedPrices[i]) / FEES).toFixed(2) : null;
-            const performance = updatedPrice && Number(updatedPrice) > 0 ? (Number(updatedPrice) / Number(buyingPricePerTon)).toFixed(1) : null;
+            const timeYear = time.split('/')[2];
+            const worstPrice = worst.values.filter((prices: Value) => prices.year.toString() === timeYear)[0]?.price ?? null;
+            const basePrice = base.values.filter((prices: Value) => prices.year.toString() === timeYear)[0]?.price ?? null;
+            const bestPrice = best.values.filter((prices: Value) => prices.year.toString() === timeYear)[0]?.price ?? null;
 
             return {
                 time: time,
-                updatedPrice,
+                updatedPrice: currentTime <= lastPriceTime ? Number(filteredUpdatedPrices[i]) : null,
+                futureUpdatedPrice: currentTime >= lastPriceTime ? Number(filteredUpdatedPrices[i]): null,
                 buyingPricePerTon,
-                performance
+                worstPrice,
+                basePrice,
+                bestPrice
             }
         });
 
         setGraphData(data);
-    }, [updatedPriceTimesData, updatedPriceData, priceTimesData, projectValueData, tonEquivalentData, finalAbsorptionData]);
+    }, [updatedPriceTimesData, updatedPriceData, priceTimesData, projectValueData, tonEquivalentData, finalAbsorptionData, forecast]);
 
     if (isLoadingTimes || isLoadingUpdatedPrices || isLoadingPriceTimes || isLoadingProjectValue || isLoadingTonEquivalent || isLoadingFinalAbsorption) {
         return (
@@ -162,7 +174,7 @@ export default function UpdatedPriceCurve() {
                         width={1000}
                         height={3000}
                         data={graphData}
-                        margin={{ top: 20, right: 10, left: 20, bottom: 20 }}
+                        margin={{ top: 10, right: 10, left: 20, bottom: 20 }}
                         style={{
                             fontSize: '14px',
                             fontFamily: 'Inter',
@@ -170,23 +182,25 @@ export default function UpdatedPriceCurve() {
                     >
                         <defs>
                             <linearGradient id="colorUpdatedPrice" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#29A46F" stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor="#29A46F" stopOpacity={0}/>
+                                <stop offset="5%" stopColor="#877B44" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#877B44" stopOpacity={0}/>
                             </linearGradient>
                             <linearGradient id="colorFutureUpdatedPrice" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#29A46F" stopOpacity={0.3}/>
-                                <stop offset="95%" stopColor="#29A46F" stopOpacity={0}/>
+                                <stop offset="5%" stopColor="#877B44" stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor="#877B44" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
                         <XAxis dataKey="time">
                             <Label value="Date" offset={-4} position="insideBottom" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </XAxis>
                         <YAxis>
-                            <Label value="Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
+                            <Label value="Sell Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>
-                        <Area name="Updated Price Curve" type="stepBefore" fill={'url(#colorUpdatedPrice)'} stroke={'#29A46F'} dot={false} activeDot={true} dataKey="updatedPrice">
-                            <LabelList dataKey="performance" content={renderCustomizedLabel} />
-                        </Area>
+                        <Area name="Updated Price Curve" type="stepBefore" fill={'url(#colorUpdatedPrice)'} stroke={'#877B44'} dot={false} activeDot={true} dataKey="updatedPrice" />
+                        <Area name="Updated Price Curve" type="stepBefore" fill={'url(#colorFutureUpdatedPrice)'} stroke={'#877B44'} dot={false} activeDot={true} dataKey="futureUpdatedPrice" strokeDasharray="4 4" />
+                        <Line name="Worst case" type="monotone" dataKey="worstPrice" stroke="#787675" dot={false} activeDot={true} />
+                        <Line name="Base case" type="monotone" dataKey="basePrice" stroke="#AAC6FD" dot={false} activeDot={true} />
+                        <Line name="Best case" type="monotone" dataKey="bestPrice" stroke="#0AF2AD" dot={false} activeDot={true} />
                         <Line name="Buying Price Per Ton" type="monotone" dataKey="buyingPricePerTon" stroke="#F97316" dot={false} activeDot={true} />
                         <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     </ComposedChart>
