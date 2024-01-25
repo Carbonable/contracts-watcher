@@ -4,7 +4,7 @@ import { Area, AreaChart, Label, ResponsiveContainer, Tooltip, XAxis, YAxis } fr
 import { Subtitle } from "~/components/common/Title";
 import { useProjectAbis } from "../ProjectAbisWrapper";
 import { shortString } from "starknet";
-import { DECIMALS } from "~/types/config";
+import { DECIMALS, FEES } from "~/types/config";
 
 export default function CumulativeSaleCurve() {
     const { yielderAbi, yielderAddress } = useProjectAbis();
@@ -59,8 +59,8 @@ export default function CumulativeSaleCurve() {
             const currentTime = new Date(Number(time) * 1000);
             return {
                 year: new Date(Number(time) * 1000).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-                cumSale: currentTime <= lastPriceTime ? Number(filteredCumSale[i]) * Math.pow(10, -DECIMALS) : null,
-                futureCumSale: currentTime >= lastPriceTime ? Number(filteredCumSale[i]) * Math.pow(10, -DECIMALS): null,
+                cumSale: currentTime <= lastPriceTime ? Number(filteredCumSale[i]) * Math.pow(10, -DECIMALS) / FEES : null,
+                futureCumSale: currentTime >= lastPriceTime ? Number(filteredCumSale[i]) * Math.pow(10, -DECIMALS) / FEES : null,
             }
         });
         setGraphData(data);
