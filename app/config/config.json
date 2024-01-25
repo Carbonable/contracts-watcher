@@ -22,6 +22,13 @@
                     "offseter": "0x022f40128af9798a0b734874fd993bbab6cf75845f26f844cb151b7041132c6d",
                     "migrator": "0x019c624eab3bebbc8a37ed90ee8582a606103792caffc91e9939af027175fa7d",
                     "old_nft": "0x0687acd1aa9dca381b305dcc7dfe1b8550fca9d2d7f81c9947c14a14149e9ef4"
+                },
+                {
+                    "slot": "3",
+                    "project": "0x0516d0acb6341dcc567e85dc90c8f64e0c33d3daba0a310157d6bba0656c8769",
+                    "minter": "0x0645af9030761e0ecacf0f15876b6cc0720f38ba929b22a76697abc2e5ab4ef2",
+                    "yielder": "0x03afe61732ed9b226309775ac4705129319729d3bee81da5632146ffd72652ae",
+                    "offseter": "0x04258037980fcc15083cde324abe1861ac00d4d48b7d60d76b5efd6f57e59e73"
                 }
             ]
         }

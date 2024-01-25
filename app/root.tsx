@@ -14,6 +14,7 @@ import { StarknetProvider } from "./components/starknet/StarknetProvider";
 import Header from "./components/menu/Header";
 import type { Config } from "./types/config";
 import configFile from "./config/config.json";
+import forecast from "./config/forecast.json";
 import configFileTestnet from "./config/config-testnet.json";
 import { useMemo } from "react";
 import Back from "./components/common/Back";
@@ -53,7 +54,7 @@ export default function App() {
           </header>
           <main className="px-4 py-8 md:px-8 mt-[80px] relative w-screen mx-auto 2xl:max-w-6xl font-inter">
             <Back />
-            <Outlet context={{ config, voyagerContractURL, displayAPR, isPublic }} />
+            <Outlet context={{ config, voyagerContractURL, displayAPR, isPublic, forecast }} />
           </main>
           <ScrollRestoration />
           <Scripts />

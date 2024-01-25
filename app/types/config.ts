@@ -3,6 +3,7 @@ export type Config = {
     voyagerContractURL: string;
     displayAPR: boolean;
     isPublic: boolean;
+    forecast: ForecastFile;
 }
 
 export type ConfigFile = {
@@ -24,6 +25,20 @@ export type Project = {
     offseter: string;
     migrator?: string;
     old_nft?: string;
+}
+
+export type ForecastFile = {
+    forecast: Forecast[];
+}
+
+export type Forecast = {
+    type: string;
+    values: Value[];
+}
+
+export type Value = {
+    year: number;
+    price: number;
 }
 
 export const DECIMALS = 6;
