@@ -1,7 +1,6 @@
 export type Config = {
     config: ConfigFile;
     voyagerContractURL: string;
-    displayAPR: boolean;
     isPublic: boolean;
     forecast: ForecastFile;
 }

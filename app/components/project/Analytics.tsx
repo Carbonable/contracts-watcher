@@ -7,7 +7,7 @@ import { useConfig } from '~/root';
 
 export default function Analytics() {
     const { projectAbi, yielderAbi } = useProjectAbis();
-    const { displayAPR, isPublic } = useConfig();
+    const {isPublic } = useConfig();
 
     if (!projectAbi || !yielderAbi) {
         return (
@@ -20,7 +20,7 @@ export default function Analytics() {
             <CumulativeAbsorptionCurve />
             <UpdatedPriceCurve />
             { !isPublic && <CumulativeSaleCurve /> }
-            { displayAPR && <APRCurve /> }
+            { !isPublic && <APRCurve /> }
         </>
     )
 }
