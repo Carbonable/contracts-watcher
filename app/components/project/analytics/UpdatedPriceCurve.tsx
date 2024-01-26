@@ -63,7 +63,7 @@ export default function UpdatedPriceCurve() {
             return (
                 <div className="px-8 pt-4 pb-4 bg-neutral-700/90 border border-neutral-500 font-inter rounded-xl">
                     <p className="text-center uppercase bold text-neutral-100">{label}</p>
-                    <p className="text-left text-neutral-100 mt-2">Updated price: {updatedPrice ? Number(updatedPrice) > 0 ? "$" + Number(updatedPrice) : "Not sold" : "TBD"}</p>
+                    <p className="text-left text-neutral-100 mt-2">Resale price: {updatedPrice ? Number(updatedPrice) > 0 ? "$" + Number(updatedPrice) : "Not sold" : "TBD"}</p>
                     <p className="text-left text-neutral-100 mt-2">Project buying price: ${Number(buyingPricePerTon).toFixed(2)}</p>
                     { performance && <p className="text-left text-greenish-500 mt-2">Performance: x{performance} </p> }
                 </div>
@@ -93,7 +93,7 @@ export default function UpdatedPriceCurve() {
 
     const [legendPayload] = useState([
         {
-            name: "Sell price",
+            name: "Resale price",
             color: "#29A46F",
         },
         {
@@ -155,7 +155,7 @@ export default function UpdatedPriceCurve() {
 
     return (
         <>
-            <Subtitle title="Price Curve" />
+            <Subtitle title="Resale performance curve" />
             <div className="w-full min-h-[400px]">
                 <ResponsiveContainer width="100%" height="100%" minHeight='400px'>
                     <ComposedChart
