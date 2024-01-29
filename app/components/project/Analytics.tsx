@@ -4,6 +4,7 @@ import CumulativeSaleCurve from './analytics/CumulativeSaleCurve';
 import UpdatedPriceCurve from './analytics/UpdatedPriceCurve';
 import APRCurve from './analytics/APRCurve';
 import { useConfig } from '~/root';
+import ForecastCurve from './analytics/ForecastCurve';
 
 export default function Analytics() {
     const { projectAbi, yielderAbi } = useProjectAbis();
@@ -19,6 +20,7 @@ export default function Analytics() {
         <>
             <CumulativeAbsorptionCurve />
             <UpdatedPriceCurve />
+            <ForecastCurve />
             { !isPublic && <CumulativeSaleCurve /> }
             { !isPublic && <APRCurve /> }
         </>
