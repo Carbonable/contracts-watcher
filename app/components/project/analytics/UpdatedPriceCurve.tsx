@@ -74,7 +74,6 @@ export default function UpdatedPriceCurve() {
     };
 
     const renderCustomizedLabel = (props: any) => {
-        console.log(props);
         const { x, y, value, index } = props;
         const radius = 16;
         const width = 0;
