@@ -108,13 +108,13 @@ export default function ForecastCurve() {
             const worstPrice = worst.values.filter((prices: Value) => prices.year.toString() === timeYear)[0]?.price ?? null;
             const basePrice = base.values.filter((prices: Value) => prices.year.toString() === timeYear)[0]?.price ?? null;
             const bestPrice = best.values.filter((prices: Value) => prices.year.toString() === timeYear)[0]?.price ?? null;
-            console.log(currentTime.toDateString() === lastPriceTime.toDateString())
+
             return {
                 time: time,
                 updatedPrice: currentTime <= lastPriceTime ? Number(filteredUpdatedPrices[i]) : null,
-                worstPrice: currentTime <= lastPriceTime ? currentTime.toDateString() === lastPriceTime.toDateString() ? Number(filteredUpdatedPrices[i]) : null : worstPrice,
-                basePrice: currentTime <= lastPriceTime ? currentTime.toDateString() === lastPriceTime.toDateString() ? Number(filteredUpdatedPrices[i]) : null : basePrice,
-                bestPrice: currentTime <= lastPriceTime ? currentTime.toDateString() === lastPriceTime.toDateString() ? Number(filteredUpdatedPrices[i]) : null : bestPrice,
+                worstPrice,
+                basePrice,
+                bestPrice,
             }
         });
 
@@ -135,7 +135,7 @@ export default function ForecastCurve() {
 
     return (
         <>
-            <Subtitle title="Forecast Curve" />
+            <Subtitle title="Market price performance" />
             <div className="w-full min-h-[400px]">
                 <ResponsiveContainer width="100%" height="100%" minHeight='400px'>
                     <ComposedChart
