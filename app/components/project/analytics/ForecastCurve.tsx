@@ -65,7 +65,7 @@ export default function ForecastCurve() {
 
     const [legendPayload] = useState([
         {
-            name: "Sell price",
+            name: "Resale price",
             color: "#877B44",
         },
         {
@@ -161,9 +161,9 @@ export default function ForecastCurve() {
                             <Label value="Sell Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>
                         <Area name="Updated Price Curve" type="stepBefore" fill={'url(#colorSalePrice)'} stroke={'#877B44'} dot={false} activeDot={true} dataKey="updatedPrice" />
-                        <Line name="Worst case" type="monotone" dataKey="worstPrice" stroke="#787675" dot={false} activeDot={true} />
-                        <Line name="Base case" type="monotone" dataKey="basePrice" stroke="#AAC6FD" dot={false} activeDot={true} />
-                        <Line name="Best case" type="monotone" dataKey="bestPrice" stroke="#0AF2AD" dot={false} activeDot={true} />
+                        <Line name="Worst case" type="monotone" dataKey="worstPrice" stroke="#787675" dot={false} activeDot={true} strokeDasharray="4 4" />
+                        <Line name="Base case" type="monotone" dataKey="basePrice" stroke="#AAC6FD" dot={false} activeDot={true} strokeDasharray="4 4" />
+                        <Line name="Best case" type="monotone" dataKey="bestPrice" stroke="#0AF2AD" dot={false} activeDot={true} strokeDasharray="4 4" />
                         <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none" }} />
                     </ComposedChart>
                 </ResponsiveContainer>
