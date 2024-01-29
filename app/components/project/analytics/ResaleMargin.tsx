@@ -8,7 +8,7 @@ import { bigIntToNumber } from "~/utils/starknet";
 import { DECIMALS, FEES } from "~/types/config";
 import { CustomLegend } from "~/components/common/CustomGraphLegend";
 
-export default function UpdatedPriceCurve() {
+export default function ResaleMargin() {
     const { yielderAbi, yielderAddress, projectAbi, projectAddress, slot } = useProjectAbis();
     const [graphData, setGraphData] = useState([{}]);
 
@@ -82,7 +82,7 @@ export default function UpdatedPriceCurve() {
       
         return (
           <g>
-            <circle cx={x + width / 2} cy={y - radius - 10} r={radius} fill="#29A46F" />
+            <circle cx={x + width / 2} cy={y - radius - 10} r={radius} fill="#877B44" />
             <text x={x + width / 2} y={y - radius - 10} fill="#fff" textAnchor="middle" dominantBaseline="middle" fontSize={10}>
                 x{value}
             </text>
@@ -93,7 +93,7 @@ export default function UpdatedPriceCurve() {
     const [legendPayload] = useState([
         {
             name: "Resale price",
-            color: "#29A46F",
+            color: "#877B44",
         },
         {
             name: 'Buying Price Per Ton',
@@ -154,7 +154,7 @@ export default function UpdatedPriceCurve() {
 
     return (
         <>
-            <Subtitle title="Resale performance curve" />
+            <Subtitle title="Resale margin" />
             <div className="w-full min-h-[400px]">
                 <ResponsiveContainer width="100%" height="100%" minHeight='400px'>
                     <ComposedChart
@@ -169,12 +169,8 @@ export default function UpdatedPriceCurve() {
                     >
                         <defs>
                             <linearGradient id="colorUpdatedPrice" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#29A46F" stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor="#29A46F" stopOpacity={0}/>
-                            </linearGradient>
-                            <linearGradient id="colorFutureUpdatedPrice" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#29A46F" stopOpacity={0.3}/>
-                                <stop offset="95%" stopColor="#29A46F" stopOpacity={0}/>
+                                <stop offset="5%" stopColor="#877B44" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#877B44" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
                         <XAxis dataKey="time">
@@ -183,7 +179,7 @@ export default function UpdatedPriceCurve() {
                         <YAxis>
                             <Label value="Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>
-                        <Area name="Updated Price Curve" type="stepBefore" fill={'url(#colorUpdatedPrice)'} stroke={'#29A46F'} dot={false} activeDot={true} dataKey="updatedPrice">
+                        <Area name="Updated Price Curve" type="stepBefore" fill={'url(#colorUpdatedPrice)'} stroke={'#877B44'} dot={false} activeDot={true} dataKey="updatedPrice">
                             <LabelList dataKey="performance" content={renderCustomizedLabel} />
                         </Area>
                         <Line name="Buying Price Per Ton" type="monotone" dataKey="buyingPricePerTon" stroke="#F97316" dot={false} activeDot={true} />
