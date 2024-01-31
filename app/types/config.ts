@@ -40,6 +40,12 @@ export type Value = {
     price: number;
 }
 
+export enum ForecastType {
+    BASE = "base",
+    WORST = "worst",
+    BEST = "best",
+}
+
 export const DECIMALS = 6;
 export const SECONDS_PER_YEAR = 31556925;
 export const FEES: number = 0.85;
