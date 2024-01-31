@@ -113,7 +113,7 @@ export default function ResaleMargin() {
       
         return (
           <g>
-            <circle cx={x + width / 2} cy={y - radius - 10} r={radius} fill="#0AF2AD" />
+            <circle cx={x + width / 2} cy={y - radius - 10} r={radius} fill="#00805A" />
             <text x={x + width / 2} y={y - radius - 10} fill="#fff" textAnchor="middle" dominantBaseline="middle" fontSize={10}>
                 x{value}
             </text>
