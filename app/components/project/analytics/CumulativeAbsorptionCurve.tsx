@@ -88,9 +88,7 @@ export default function CumulativeAbsorptionCurve() {
                                 <stop offset="95%" stopColor="#22875B" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
-                        <XAxis dataKey="year">
-                            <Label value="Date" offset={-4} position="insideBottom" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
-                        </XAxis>
+                        <XAxis dataKey="year" />
                         <YAxis>
                             <Label value="Absorption (t)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>

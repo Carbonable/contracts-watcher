@@ -4,7 +4,7 @@ import { Area, ComposedChart, Label, Line, ResponsiveContainer, Tooltip, XAxis, 
 import { useProjectAbis } from "../ProjectAbisWrapper";
 import { shortString } from "starknet";
 import { Subtitle } from "~/components/common/Title";
-import type { Forecast, Value } from "~/types/config";
+import { FEES, type Forecast, type Value } from "~/types/config";
 import { useConfig } from "~/root";
 import { CustomLegend } from "~/components/common/CustomGraphLegend";
 
@@ -41,21 +41,13 @@ export default function ForecastCurve() {
             const basePrice = payload.filter((price: any) => price.dataKey === "basePrice")[0]?.value ?? null;
             const bestPrice = payload.filter((price: any) => price.dataKey === "bestPrice")[0]?.value ?? null;
 
-            if (updatedPrice !== null) {
-                return (
-                    <div className="px-8 pt-4 pb-4 bg-neutral-700/90 border border-neutral-500 font-inter rounded-xl">
-                        <p className="text-center uppercase bold text-neutral-100">{label}</p>
-                        <p className="text-left text-orange-dark mt-2">Resale price: {Number(updatedPrice) > 0 ? "$" + Number(updatedPrice) : "Not sold"}</p>
-                    </div>
-                )
-            }
-
             return (
                 <div className="px-8 pt-4 pb-4 bg-neutral-700/90 border border-neutral-500 font-inter rounded-xl">
                     <p className="text-center uppercase bold text-neutral-100">{label}</p>
-                    <p className="text-left text-[#787675] mt-2">Worst forecast: ${Number(worstPrice).toFixed(2) ?? "no price"}</p>
-                    <p className="text-left text-[#AAC6FD] mt-2">Base forecast: ${Number(basePrice).toFixed(2) ?? "no price"}</p>
+                    <p className="text-left text-orange-dark mt-2">Resale price: {Number(updatedPrice) > 0 ? "$" + Number(updatedPrice) : "Not sold yet"}</p>
                     <p className="text-left text-[#0AF2AD] mt-2">Best forecast: ${Number(bestPrice).toFixed(2) ?? "no price"}</p>
+                    <p className="text-left text-[#AAC6FD] mt-2">Base forecast: ${Number(basePrice).toFixed(2) ?? "no price"}</p>
+                    <p className="text-left text-[#787675] mt-2">Worst forecast: ${Number(worstPrice).toFixed(2) ?? "no price"}</p>
                 </div>
             );
         }
@@ -111,7 +103,7 @@ export default function ForecastCurve() {
 
             return {
                 time: time,
-                updatedPrice: currentTime <= lastPriceTime ? Number(filteredUpdatedPrices[i]) : null,
+                updatedPrice: currentTime <= lastPriceTime ? (Number(filteredUpdatedPrices[i]) / FEES).toFixed(2) : null,
                 worstPrice,
                 basePrice,
                 bestPrice,
@@ -154,9 +146,7 @@ export default function ForecastCurve() {
                                 <stop offset="95%" stopColor="#877B44" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
-                        <XAxis dataKey="time">
-                            <Label value="Date" offset={-4} position="insideBottom" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
-                        </XAxis>
+                        <XAxis dataKey="time" />
                         <YAxis>
                             <Label value="Sell Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>

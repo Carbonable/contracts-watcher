@@ -104,9 +104,7 @@ export default function CumulativeSaleCurve() {
                                 <stop offset="95%" stopColor="#334566" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
-                        <XAxis dataKey="year">
-                            <Label value="Date" offset={-4} position="insideBottom" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
-                        </XAxis>
+                        <XAxis dataKey="year" />
                         <YAxis>
                             <Label value="Sell Price ($)" offset={-2}  angle={-90} position="insideLeft" style={{ textAnchor: 'middle', fontSize: '100%', fill: '#878A94' }} />
                         </YAxis>
