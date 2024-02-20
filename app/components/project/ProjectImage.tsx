@@ -5,11 +5,18 @@ import { useSlotURI } from "./SlotURI";
 export default function ProjectImage() {
     const slotURI = useSlotURI();
     const id = slotURI.name.toString().toLowerCase().replace(' ', '_');
-    const image = slotURI.image.replaceAll('%23', '#');
+    
+    const image = 
+        slotURI.image_data ? slotURI.image_data.replaceAll('%23', '#') : 
+            slotURI.image ?slotURI.image.replaceAll('%23', '#'): null;
 
     useEffect(() => {
         // Function to modify SVGs
         function modifySVG(containerId: string) {
+            if (!image) {
+                return;
+            }
+
             const container = SVG().addTo(`#${containerId}`);
             const svgToDisplay = container.svg(image, true);
             const prefix = containerId + '_';

@@ -6,7 +6,8 @@ type Attribute = {
 
 export type SlotURI = {
     name: string;
-    image: string;
+    image_data?: string;
+    image?: string;
     youtube_url: string;
     description: string;
     external_url: string;
