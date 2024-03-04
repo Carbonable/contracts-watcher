@@ -29,6 +29,11 @@
                     "minter": "0x0645af9030761e0ecacf0f15876b6cc0720f38ba929b22a76697abc2e5ab4ef2",
                     "yielder": "0x03afe61732ed9b226309775ac4705129319729d3bee81da5632146ffd72652ae",
                     "offseter": "0x04258037980fcc15083cde324abe1861ac00d4d48b7d60d76b5efd6f57e59e73"
+                },
+                {
+                    "slot": "1",
+                    "project": "0x05a667adc04676fba78a29371561a0bf91dab25847d5dc4709a93a4cfb5ff293",
+                    "minter": "0x07336c28e621dce9940603fb85136c57a3c46ce22e4ec862eeb0bdb0cd5cc9d9"
                 }
             ]
         }
