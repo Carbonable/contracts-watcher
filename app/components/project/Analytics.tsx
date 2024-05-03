@@ -10,19 +10,23 @@ export default function Analytics() {
     const { projectAbi, yielderAbi } = useProjectAbis();
     const {isPublic } = useConfig();
 
-    if (!projectAbi || !yielderAbi) {
+    if (!projectAbi && !yielderAbi) {
         return (
-            <div className="w-full mt-4 text-xl text-neutral-300">Yielder contract is not deployed yet. No analytics available yet.</div>
+            <div className="w-full mt-4 text-xl text-neutral-300">No analytics available yet.</div>
         )
     }
 
     return (
         <>
-            <CumulativeAbsorptionCurve />
-            <ForecastCurve />
-            <ResaleMargin />
-            { !isPublic && <CumulativeSaleCurve /> }
-            { !isPublic && <APRCurve /> }
+            {projectAbi && <CumulativeAbsorptionCurve />}
+            {yielderAbi && 
+                <>
+                    <ForecastCurve />
+                    <ResaleMargin />
+                    { !isPublic && <CumulativeSaleCurve /> }
+                    { !isPublic && <APRCurve /> }
+                </>
+            }
         </>
     )
 }
