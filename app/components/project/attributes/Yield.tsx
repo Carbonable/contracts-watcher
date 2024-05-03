@@ -15,6 +15,12 @@ export default function Yield() {
     const { yielderAbi, yielderAddress, minterAddress } = useProjectAbis();
     const { isPublic } = useConfig();
 
+    if (!yielderAbi || !yielderAddress) {
+        return (
+            <div className="w-full text-neutral-300">The yielder contract is not deployed yet</div>
+        )
+    }
+
     return (
         <>
             <TotalDeposited />

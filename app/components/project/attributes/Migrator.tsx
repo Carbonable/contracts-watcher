@@ -10,7 +10,7 @@ export default function Migrator() {
 
     if (migratorAbi === undefined) {
         return (
-            <div>Migrator abi is undefined...</div>
+            <div>No migrator contract for this project</div>
         )
     }
 

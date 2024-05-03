@@ -12,7 +12,7 @@ export default function Analytics() {
 
     if (!projectAbi || !yielderAbi) {
         return (
-            <div>Project ABI or Yielder ABI is undefined...</div>
+            <div className="w-full mt-4 text-xl text-neutral-300">Yielder contract is not deployed yet. No analytics available yet.</div>
         )
     }
 
