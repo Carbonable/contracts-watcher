@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { shortString } from "starknet";
 import { type SlotURI } from "~/types/slotURI";
 import { useProjectAbis } from "./ProjectAbisWrapper";
+import ProjectCardSkeleton from "../common/ProjectCardSkeleton";
 
 const SlotURIContext = createContext<SlotURI>({} as SlotURI);
 export default function SlotURIWrapper({ children }: { children: React.ReactNode }) {
@@ -31,7 +32,8 @@ export default function SlotURIWrapper({ children }: { children: React.ReactNode
 
     if (isLoading || slotUri === undefined) {
         return (
-            <div>Loading slot_uri...</div>
+            // <div>Loading slot_uri...</div>
+            <ProjectCardSkeleton/>
         )
     }
 
