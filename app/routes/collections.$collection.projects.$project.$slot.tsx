@@ -11,6 +11,7 @@ import Analytics from "~/components/project/Analytics";
 import MigrationStatusWrapper from "~/components/project/MigrationStatusWrapper";
 import type { Collection, ConfigFile } from "~/types/config";
 import { useConfig } from "~/root";
+import { ProjectDetailSkeleton } from "~/components/common/ProjectDetailsSkeleton";
 
 export async function loader({params}: LoaderFunctionArgs) {
     return json({ project_address: params.project, slot: params.slot, collectionId: params.collection });
@@ -30,8 +31,10 @@ export default function Index() {
     const project = collection?.projects.find((project) => project.project === project_address && project.slot === slot);
 
     if (!project) {
-        return null;
+        return <ProjectDetailSkeleton/>;
     }
+
+    
 
     return (
         <>  
