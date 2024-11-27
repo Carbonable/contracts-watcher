@@ -4,7 +4,7 @@ export function ProjectDetailSkeleton() {
           <div className="w-full flex flex-wrap">
               {/* Image Skeleton */}
               <div className="w-full md:w-1/3">
-                  <div className="bg-neutral-500 opacity-5 aspect-square w-full"></div>
+                  <div className="bg-neutral-300 opacity-5 aspect-square w-full"></div>
               </div>
               
               {/* Project Info Skeleton */}
