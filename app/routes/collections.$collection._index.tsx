@@ -5,7 +5,7 @@ import SlotURIWrapper from "~/components/project/SlotURI";
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import type { Collection } from "~/types/config";
 import { useConfig } from "~/root";
-import { ProjectDetailSkeleton } from "~/components/common/ProjectDetailsSkeleton";
+
 
 export async function loader({params}: LoaderFunctionArgs) {
     const collectionId = params.collection;
@@ -28,7 +28,7 @@ export default function Index() {
     const collection: Collection | undefined = collections.find((collection: Collection) => collection.id === collectionId);
 
     if (!collection) {
-        return <ProjectDetailSkeleton/>
+        return null;
     }
 
     return (
