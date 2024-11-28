@@ -3,9 +3,11 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { shortString } from "starknet";
 import { type SlotURI } from "~/types/slotURI";
 import { useProjectAbis } from "./ProjectAbisWrapper";
+import ProjectCardSkeleton from "../common/ProjectCardSkeleton";
+import { ProjectDetailSkeleton } from "../common/ProjectDetailsSkeleton";
 
 const SlotURIContext = createContext<SlotURI>({} as SlotURI);
-export default function SlotURIWrapper({ children }: { children: React.ReactNode }) {
+export default function SlotURIWrapper({ children }: { children: React.ReactNode }) {      
     const [slotUri, setSlotUri] = useState<SlotURI|undefined>(undefined);
     const { projectAbi, projectAddress, slot } = useProjectAbis();
 
@@ -24,14 +26,23 @@ export default function SlotURIWrapper({ children }: { children: React.ReactNode
 
         array.shift();
 
-        if (array.length > 0) {
-            setSlotUri(JSON.parse(array.map(shortString.decodeShortString).join('').replace("data:application/json,", "")));
-        }
+            if (array.length > 0) {
+              try {
+                  const cleanedString = array
+                      .map(shortString.decodeShortString)
+                      .join('')
+                      .replace("data:application/json,", "");
+                  const parsedData = JSON.parse(cleanedString);
+                  setSlotUri(parsedData);
+              } catch (error) {
+                  console.error('Failed to parse JSON:', error);
+              }
+          }
     }, [data]);
 
-    if (isLoading || slotUri === undefined) {
+    if (isLoading && slotUri === undefined)  {
         return (
-            <div>Loading slot_uri...</div>
+            <ProjectCardSkeleton/>
         )
     }
 
@@ -41,7 +52,11 @@ export default function SlotURIWrapper({ children }: { children: React.ReactNode
         )
     }
 
-    if (slotUri === undefined) { return null; }
+    if (slotUri === undefined) { 
+      return (
+        <ProjectDetailSkeleton/>
+      )
+    }
 
     return (
         <SlotURIContext.Provider value={ slotUri }>

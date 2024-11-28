@@ -9,6 +9,7 @@ import { useConfig } from "~/root";
 import { useEffect, useState } from "react";
 // import "maplibre-gl/dist/maplibre-gl.css";
 
+
 export async function loader({params}: LoaderFunctionArgs) {
     const collectionId = params.collection;
 

@@ -1,4 +1,4 @@
-import { StarknetConfig, argent, braavos, nethermindProvider } from "@starknet-react/core";
+import { StarknetConfig, argent, braavos, nethermindProvider, publicProvider } from "@starknet-react/core";
 import { mainnet, sepolia } from "@starknet-react/chains";
 import { useMemo } from "react";
 
@@ -12,7 +12,8 @@ export function StarknetProvider({ children, defautlNetwork, rpcApiKey }: { chil
       return [sepolia]
     }, [defautlNetwork]);
   
-    const provider = nethermindProvider({ apiKey: rpcApiKey });
+    // const provider = nethermindProvider({ apiKey: rpcApiKey });
+    const provider = publicProvider();
     const connectors = useMemo(() => [braavos(), argent()], []);
 
   return (
