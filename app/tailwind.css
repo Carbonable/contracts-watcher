@@ -5,3 +5,20 @@
 ::-webkit-scrollbar {
     display: none;
 }
+
+* {
+    overflow-x: hidden;
+}
+
+.story-map {
+   overflow: hidden;
+}
+
+.maplibregl-theme-classic {
+    position: relative; /* Ensure it doesn't overflow */
+    overflow: visible; /* Prevent clipping of markers */
+}
+
+.maplibregl-ctrl-attrib-inner, .maplibregl-ctrl-attrib-button {
+    display: none;
+}
