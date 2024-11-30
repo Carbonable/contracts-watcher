@@ -7,13 +7,11 @@ import maplibregl from "maplibre-gl";
 import "maplibre-react-components/style.css";
 import "maplibre-theme/modern.css";
 import "maplibre-theme/icons.default.css";
-// import { Link } from "@remix-run/react";
+import CustomMarker from "./CustomMarker";
+import MapSkeleton from "../common/MapSkeleton";
 
 interface ProjectMapProps {
     mapData: SlotURI[];
-    project: string;
-    projectSlot: string;
-    collectionId: string;
 }
 
 function filterByName(arr: SlotURI[]) {
@@ -27,12 +25,9 @@ function filterByName(arr: SlotURI[]) {
     });
 }
 
-
 const geocodeLocation = async (location: string) => {
     const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-            location
-        )}&format=json`
+        `https://nominatim.openstreetmap.org/search?q=${location}&format=json`
     );
     const data = await response.json();
     if (data.length > 0) {
@@ -41,9 +36,7 @@ const geocodeLocation = async (location: string) => {
     return null;
 };
 
-export default function ProjectMap({ mapData, project,
-    projectSlot,
-    collectionId }: ProjectMapProps) {
+export default function ProjectMap({ mapData }: ProjectMapProps) {
     const mapRef = useRef<maplibregl.Map | null>(null);
     useEffect(() => {
         if (mapData) {
@@ -52,8 +45,6 @@ export default function ProjectMap({ mapData, project,
     }, [mapData])
 
     const [locations, setLocations] = useState<any[]>([]);
-
-
 
     useEffect(() => {
         const fetchCoordinates = async () => {
@@ -87,21 +78,16 @@ export default function ProjectMap({ mapData, project,
     }, [locations]);
 
     return mapData.length !== 0 ? <RMap
-        initialZoom={3}
-        ref={mapRef}
-        className="maplibregl-theme-classic"
-        style={{ width: '100%', height: "600px" }}
-        initialCenter={[6.4546, 46.1067]}
-        scrollZoom={false}
-        doubleClickZoom={false}
+        initialCenter={locations[0] == undefined ? [0, 0] : [locations[0].coordinates[0], locations[0].coordinates[1]]}
+        style={{ width: '100%', height: "800px", overflowY: "hidden" }}
         mapStyle={"https://api.maptiler.com/maps/satellite/style.json?key=PuTLhnyXi7HCWhYtcyJc"}
     >
-        <RMarker longitude={6.4546} latitude={46.1067} initialAnchor="bottom" />
         {locations.map((item) =>
             <>
-                {console.log(item)}
-                <RMarker onClick={ } longitude={item.coordinates[0]} latitude={item.coordinates[1]} initialAnchor="bottom" />
+                <RMarker longitude={item.coordinates[0]} latitude={item.coordinates[1]}>
+                    <CustomMarker item={item} />
+                </RMarker>
             </>
         )}
-    </RMap> : null;
+    </RMap> : <MapSkeleton />;
 }
