@@ -5,6 +5,9 @@ type Attribute = {
 }
 
 export type SlotURI = {
+    project?: string;
+    projectSlot?: string;
+    collectionId?: string;
     name: string;
     image_data?: string;
     image?: string;

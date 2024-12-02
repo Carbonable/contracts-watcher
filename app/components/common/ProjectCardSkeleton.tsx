@@ -1,6 +1,6 @@
 export default function ProjectCardSkeleton() {
   return (
-      <div className="bg-neutral-500 opacity-10 border border-gray-200 rounded-lg overflow-hidden shadow-sm animate-pulse">
+      <div className="bg-neutral-500 opacity-10 border h-[800px] w-full border-gray-200 rounded-lg overflow-hidden shadow-sm animate-pulse">
           {/* Image Placeholder */}
           <div className="w-full aspect-square bg-neutral-400 opacity-10 md:w-1/3 sm:w-2/3"></div>
           
