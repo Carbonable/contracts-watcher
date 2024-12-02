@@ -12,8 +12,8 @@ interface CustomMarkerProps {
 
 function CustomMarker({ item }: CustomMarkerProps) {
     const id = item?.name.toString().toLowerCase().replace(' ', '_');
-    const image = item?.image_data ? item?.image_data.replaceAll('%23', '#') :
-            item?.image_data ? item?.image_data.replaceAll('%23', '#') : null;
+    const image = item?.image ? item?.image.replaceAll('%23', '#') :
+            item?.image ? item?.image.replaceAll('%23', '#') : null;
 
     useEffect(() => {
         // Function to modify SVGs
@@ -72,7 +72,6 @@ function CustomMarker({ item }: CustomMarkerProps) {
 
     return (
         <>
-            {console.log(item, "WTF")}
             <Link className="relative link-container" to={`/collections/${item?.collectionId}/projects/${item?.project}/${item?.projectSlot}`}>
                 <div
                     className="custom-marker-img"

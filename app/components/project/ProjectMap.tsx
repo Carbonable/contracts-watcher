@@ -38,11 +38,6 @@ const geocodeLocation = async (location: string) => {
 
 export default function ProjectMap({ mapData }: ProjectMapProps) {
     const mapRef = useRef<maplibregl.Map | null>(null);
-    useEffect(() => {
-        if (mapData) {
-            console.log(filterByName(mapData));
-        }
-    }, [mapData])
 
     const [locations, setLocations] = useState<any[]>([]);
 
@@ -56,7 +51,6 @@ export default function ProjectMap({ mapData }: ProjectMapProps) {
 
                 })
             );
-            console.log(updatedData, "Coordinates");
             setLocations(filterByName(updatedData));
         };
 
@@ -84,9 +78,31 @@ export default function ProjectMap({ mapData }: ProjectMapProps) {
     >
         {locations.map((item) =>
             <>
-                <RMarker longitude={item.coordinates[0]} latitude={item.coordinates[1]}>
-                    <CustomMarker item={item} />
-                </RMarker>
+                return mapData.length !== 0 ? (
+                <div className="relative w-full" style={{ paddingTop: '56.25%' }}> {/* 16:9 Aspect Ratio */}
+                    <RMap
+                        initialCenter={locations[0] == undefined ? [0, 0] : [locations[0].coordinates[0], locations[0].coordinates[1]]}
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                        }}
+                        mapStyle="https://api.maptiler.com/maps/satellite/style.json?key=PuTLhnyXi7HCWhYtcyJc"
+                    >
+                        {locations.map((item, index) => (
+                            <>
+                            <RMarker longitude={item.coordinates[0]} latitude={item.coordinates[1]}>
+                                <CustomMarker item={item} />
+                            </RMarker>
+                            </>
+                        ))}
+                    </RMap>
+                </div>
+                ) : (
+                <MapSkeleton />
+                );
             </>
         )}
     </RMap> : <MapSkeleton />;
