@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 // import "maplibre-gl/dist/maplibre-gl.css";
 
 
-export async function loader({params}: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
     const collectionId = params.collection;
 
     if (!collectionId) {
@@ -34,14 +34,14 @@ interface StackMapDataProps {
     collectionId: string;
 }
 
-const StackMapData: React.FC<StackMapDataProps> = ({ onTrigger = () => {}, mapData, project, projectSlot, collectionId }) => {
+const StackMapData: React.FC<StackMapDataProps> = ({ onTrigger = () => { }, mapData, project, projectSlot, collectionId }) => {
     const slotURI = useSlotURI();
     useEffect(() => {
         if (Object.keys(slotURI).length !== 0) {
             slotURI.project = project;
             slotURI.projectSlot = projectSlot;
             slotURI.collectionId = collectionId;
-            onTrigger([...mapData, slotURI ]);
+            onTrigger([...mapData, slotURI]);
         }
     }, []);
     return null;
@@ -60,19 +60,17 @@ export default function Index() {
 
     return (
         <>
-            <h1 className="text-2xl uppercase font-bold">{collection.name}'s Projects</h1>
-            <div className="relative mt-6">
-                <ProjectMap mapData={mapData} />
-            </div>
+            <h1 className="text-2xl mb-[20px] uppercase font-bold">{collection.name}'s Projects</h1>
+            <ProjectMap mapData={mapData} />
             <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {collection.projects.map((project, index) => (
-                    <ProjectAbisWrapper 
-                        key={`abi_${project.slot}_${index}`} 
+                    <ProjectAbisWrapper
+                        key={`abi_${project.slot}_${index}`}
                         project={project}
                     >
                         <Link to={`/collections/${collection.id}/projects/${project.project}/${project.slot}`} className="hover:brightness-110">
                             <SlotURIWrapper>
-                                <StackMapData mapData={mapData} projectSlot={project.slot} project={project.project} collectionId={collection.id} onTrigger={setMapData}  />
+                                <StackMapData mapData={mapData} projectSlot={project.slot} project={project.project} collectionId={collection.id} onTrigger={setMapData} />
                                 <ProjectImage />
                             </SlotURIWrapper>
                         </Link>

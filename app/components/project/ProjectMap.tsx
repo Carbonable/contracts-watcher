@@ -1,15 +1,9 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { SlotURI } from "~/types/slotURI";
-import "maplibre-gl/dist/maplibre-gl.css";
 import { RMap, RMarker } from "maplibre-react-components";
-import maplibregl from "maplibre-gl";
-import "maplibre-react-components/style.css";
-import "maplibre-theme/modern.css";
-import "maplibre-theme/icons.default.css";
 import CustomMarker from "./CustomMarker";
 import MapSkeleton from "../common/MapSkeleton";
-
 interface ProjectMapProps {
     mapData: SlotURI[];
 }
@@ -31,14 +25,12 @@ const geocodeLocation = async (location: string) => {
     );
     const data = await response.json();
     if (data.length > 0) {
-        return [parseFloat(data[0].lon), parseFloat(data[0].lat)]; // [longitude, latitude]
+        return [parseFloat(data[0].lon), parseFloat(data[0].lat)]; 
     }
     return null;
 };
 
 export default function ProjectMap({ mapData }: ProjectMapProps) {
-    const mapRef = useRef<maplibregl.Map | null>(null);
-
     const [locations, setLocations] = useState<any[]>([]);
 
     useEffect(() => {
@@ -57,53 +49,19 @@ export default function ProjectMap({ mapData }: ProjectMapProps) {
         fetchCoordinates();
     }, [mapData]);
 
-    useEffect(() => {
-        if (locations.length > 0 && mapRef.current) {
-            const bounds = new maplibregl.LngLatBounds();
-
-            locations.forEach((item) => {
-                if (item.coordinates) {
-                    bounds.extend(item.coordinates);
-                }
-            });
-
-            mapRef.current.fitBounds(bounds, { padding: 50, maxZoom: 15 });
-        }
-    }, [locations]);
-
-    return mapData.length !== 0 ? <RMap
+    return mapData.length !== 0 ? 
+    <RMap
         initialCenter={locations[0] == undefined ? [0, 0] : [locations[0].coordinates[0], locations[0].coordinates[1]]}
-        style={{ width: '100%', height: "800px", overflowY: "hidden" }}
-        mapStyle={"https://api.maptiler.com/maps/satellite/style.json?key=PuTLhnyXi7HCWhYtcyJc"}
+        style={{ width: '100%', height: "1000px", overflowY: "hidden" }}
+        mapStyle={"https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/style.json"}
+        // mapStyle={"https://api.maptiler.com/maps/satellite/style.json?key=PuTLhnyXi7HCWhYtcyJc"}
     >
-        {locations.map((item) =>
+        {locations.map((item, index) => (
             <>
-                return mapData.length !== 0 ? (
-                <div className="relative w-full" style={{ paddingTop: '56.25%' }}> {/* 16:9 Aspect Ratio */}
-                    <RMap
-                        initialCenter={locations[0] == undefined ? [0, 0] : [locations[0].coordinates[0], locations[0].coordinates[1]]}
-                        style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                        }}
-                        mapStyle="https://api.maptiler.com/maps/satellite/style.json?key=PuTLhnyXi7HCWhYtcyJc"
-                    >
-                        {locations.map((item, index) => (
-                            <>
-                            <RMarker longitude={item.coordinates[0]} latitude={item.coordinates[1]}>
-                                <CustomMarker item={item} />
-                            </RMarker>
-                            </>
-                        ))}
-                    </RMap>
-                </div>
-                ) : (
-                <MapSkeleton />
-                );
+                <RMarker key={index} longitude={item.coordinates[0]} latitude={item.coordinates[1]}>
+                    <CustomMarker item={item} />
+                </RMarker>
             </>
-        )}
+        ))}
     </RMap> : <MapSkeleton />;
 }

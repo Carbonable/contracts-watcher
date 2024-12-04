@@ -33,11 +33,6 @@
   transform: scale(1);
 }
 
-.maplibregl-theme-classic {
-    position: relative; /* Ensure it doesn't overflow */
-    overflow: visible; /* Prevent clipping of markers */
-}
-
 .maplibregl-ctrl-attrib-inner, .maplibregl-ctrl-attrib-button {
     display: none;
 }
