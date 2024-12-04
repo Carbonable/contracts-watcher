@@ -18,6 +18,9 @@ import forecast from "./config/forecast.json";
 import configFileTestnet from "./config/config-testnet.json";
 import { useMemo } from "react";
 import Back from "./components/common/Back";
+import "maplibre-react-components/style.css";
+import "maplibre-gl/dist/maplibre-gl.css";
+
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
@@ -44,7 +47,8 @@ export default function App() {
         <Links />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"></link>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"/>
+        <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
       </head>
       <body className="bg-neutral-800 text-neutral-100">
         <StarknetProvider defautlNetwork={defautlNetwork} rpcApiKey={rpcApiKey} >
