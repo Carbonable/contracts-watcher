@@ -5,3 +5,34 @@
 ::-webkit-scrollbar {
     display: none;
 }
+
+* {
+    overflow-x: hidden;
+}
+
+.story-map {
+   overflow: hidden;
+}
+
+.link-container {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-marker-img {
+  display: none;
+  opacity: 0;
+  z-index: 999;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: scale(0.9);
+}
+
+.link-container:hover .custom-marker-img {
+  display: block;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.maplibregl-ctrl-attrib-inner, .maplibregl-ctrl-attrib-button {
+    display: none;
+}
