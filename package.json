@@ -21,6 +21,7 @@
     "@starknet-react/chains": "^0.1.5",
     "@starknet-react/core": "^2.2.2",
     "@svgdotjs/svg.js": "^3.2.0",
+    "@vis.gl/react-maplibre": "1.0.0-alpha.4",
     "get-starknet-core": "^3.2.0",
     "isbot": "^3.7.0",
     "maplibre-gl": "^4.7.1",
