@@ -1,10 +1,13 @@
 import { useContractRead } from "@starknet-react/core";
 import LabelComponent from "~/components/common/LabelComponent";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
+import { parseU256 } from "~/utils/starknet";
 import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function TokenSupply() {
     const { projectAbi, projectAddress, slot } = useProjectAbis();
+
+    const title = "Token supply";
 
     const { data, error, isError, isLoading } = useContractRead({
         address: projectAddress,
@@ -13,14 +16,14 @@ export default function TokenSupply() {
         args: [slot]
     });
 
-    const title = "Token supply";
+    const value = parseU256(data);
 
-    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
+    if (isLoading || isError || value === undefined) {
         return (
             <LoadingAndError
                 title={title}
                 isLoading={isLoading}
-                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                isError={isError || (!isLoading && value === undefined)}
                 error={error}
             />
         )
@@ -29,8 +32,7 @@ export default function TokenSupply() {
     return (
         <LabelComponent
             title={title}
-            value={data.toString()}
-
+            value={value.toString()}
         />
     )
 }

@@ -12,26 +12,33 @@ export default function ForecastCurve() {
     const { yielderAbi, yielderAddress } = useProjectAbis();
     const [graphData, setGraphData] = useState([{}]);
     const { forecast } = useConfig();
+    const isReady = Boolean(yielderAbi && yielderAddress);
 
     const { data: updatedPriceData, isLoading: isLoadingUpdatedPrices, error: errorUpdatedPrices } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_updated_prices',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isReady
     });
 
     const { data: updatedPriceTimesData, isLoading: isLoadingTimes, error: errorTimes } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_cumsale_times',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isReady
     });
 
     const { data: priceTimesData, isLoading: isLoadingPriceTimes, error: errorPriceTimes } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_price_times',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isReady
     });
 
     const CustomTooltip = ({ active, payload, label }: any) => {

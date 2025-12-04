@@ -2,25 +2,35 @@ import { useContractRead } from "@starknet-react/core";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
 import LabelComponent from "~/components/common/LabelComponent";
 import { DECIMALS } from "~/types/config";
-import { bigIntToNumber } from "~/utils/starknet";
+import { bigIntToNumber, parseU256 } from "~/utils/starknet";
 import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function ReservedValue() {
     const { minterAbi, minterAddress } = useProjectAbis();
-    const { data, error, isLoading,isError } = useContractRead({
-        address: minterAddress,
-        abi: minterAbi,
-        functionName: 'get_reserved_value'
-    });
 
     const title = "Reserved value";
+    const isReady = Boolean(minterAbi && minterAddress);
 
-    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
+    const { data, error, isLoading, isError } = useContractRead({
+        address: minterAddress,
+        abi: minterAbi,
+        functionName: 'get_reserved_value',
+        args: [],
+        enabled: isReady
+    });
+
+    if (!isReady || isLoading) {
+        return <LoadingAndError title={title} isLoading={true} isError={false} error={undefined} />;
+    }
+
+    const value = parseU256(data);
+
+    if (isError || value === undefined) {
         return (
             <LoadingAndError
                 title={title}
-                isLoading={isLoading}
-                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                isLoading={false}
+                isError={true}
                 error={error}
             />
         )
@@ -29,7 +39,7 @@ export default function ReservedValue() {
     return (
         <LabelComponent
             title={title}
-            value={(bigIntToNumber(data) * Math.pow(10, -DECIMALS)).toString()}
+            value={(bigIntToNumber(value) * Math.pow(10, -DECIMALS)).toString()}
         />
     )
 }

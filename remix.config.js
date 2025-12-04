@@ -6,4 +6,13 @@ export default {
   // publicPath: "/build/",
   // serverBuildPath: "build/index.js",
   serverDependenciesToBundle: [],
+  browserNodeBuiltinsPolyfill: {
+    modules: {
+      util: true,
+      buffer: true,
+      stream: true,
+      events: true,
+      crypto: true,
+    },
+  },
 };

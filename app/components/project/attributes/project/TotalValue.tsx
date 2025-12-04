@@ -1,12 +1,14 @@
 import { useContractRead } from "@starknet-react/core";
 import LabelComponent from "~/components/common/LabelComponent";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
-import { bigIntToNumber } from "~/utils/starknet";
+import { bigIntToNumber, parseU256 } from "~/utils/starknet";
 import { DECIMALS } from "~/types/config";
 import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function TotalValue() {
     const { projectAbi, projectAddress, slot } = useProjectAbis();
+
+    const title = "Total minted value";
 
     const { data, error, isError, isLoading } = useContractRead({
         address: projectAddress,
@@ -15,14 +17,14 @@ export default function TotalValue() {
         args: [slot]
     });
 
-    const title = "Total minted value";
+    const value = parseU256(data);
 
-    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
+    if (isLoading || isError || value === undefined) {
         return (
             <LoadingAndError
                 title={title}
                 isLoading={isLoading}
-                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                isError={isError || (!isLoading && value === undefined)}
                 error={error}
             />
         )
@@ -31,7 +33,7 @@ export default function TotalValue() {
     return (
         <LabelComponent
             title={title}
-            value={`$${(bigIntToNumber(data) * Math.pow(10, -DECIMALS)).toLocaleString('en-US')}`}
+            value={`$${(bigIntToNumber(value) * Math.pow(10, -DECIMALS)).toLocaleString('en-US')}`}
         />
     )
 }

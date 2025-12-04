@@ -25,11 +25,11 @@ RUN apt-get update -qq && \
 # Install dependencies in a separate layer for the production build
 FROM base AS prod-deps
 ENV NODE_ENV=production
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --prod
 
 FROM base AS build
 # Install all dependencies and build the app
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 RUN pnpm run build
 
 FROM base

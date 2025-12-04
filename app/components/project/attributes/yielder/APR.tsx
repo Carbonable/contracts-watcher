@@ -5,6 +5,9 @@ import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function APR({ minterAddress }: { minterAddress: string}) {
     const { yielderAbi, yielderAddress } = useProjectAbis();
+
+    const title = "APR";
+
     const { data, error, isError, isLoading } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
@@ -13,7 +16,9 @@ export default function APR({ minterAddress }: { minterAddress: string}) {
         parseResult: false
     });
 
-    const title = "APR";
+    if (!yielderAbi || !yielderAddress) {
+        return <LoadingAndError title={title} isLoading={true} isError={false} error={undefined} />;
+    }
 
     if (isLoading || isError || data === undefined || typeof data !== 'object') {
         return (

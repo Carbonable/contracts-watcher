@@ -9,26 +9,33 @@ import { DECIMALS, FEES } from "~/types/config";
 export default function CumulativeSaleCurve() {
     const { yielderAbi, yielderAddress } = useProjectAbis();
     const [graphData, setGraphData] = useState([{}]);
+    const isReady = Boolean(yielderAbi && yielderAddress);
 
     const { data: cumSaleData, isLoading: isLoadingCumSale, error: errorCumSale } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_cumsales',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isReady
     });
 
     const { data: cumSaleTimesData, isLoading: isLoadingTimes, error: errorTimes } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_cumsale_times',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isReady
     });
 
     const { data: priceTimesData, isLoading: isLoadingPriceTimes, error: errorPriceTimes } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_price_times',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isReady
     });
 
     const CustomTooltip = ({ active, payload, label }: any) => {

@@ -24,13 +24,14 @@ export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 export const loader: LoaderFunction = async () => {
     const defautlNetwork = process.env.NETWORK;
     const rpcApiKey = process.env.RPC_API_KEY;
+    const rpcUrl = process.env.RPC;
     const isPublic = process.env.IS_PUBLIC;
 
-    return json({ defautlNetwork, rpcApiKey, isPublic });
+    return json({ defautlNetwork, rpcApiKey, rpcUrl, isPublic });
 };
 
 export default function App() {
-  const { defautlNetwork, rpcApiKey, isPublic } = useLoaderData();
+  const { defautlNetwork, rpcApiKey, rpcUrl, isPublic } = useLoaderData();
   const config = useMemo(() => defautlNetwork === 'mainnet' ? configFile : configFileTestnet, [defautlNetwork]);
 
   const voyagerContractURL = defautlNetwork === 'mainnet' ? 'https://voyager.online/contract/' : 'https://goerli.voyager.online/contract/'
@@ -47,7 +48,7 @@ export default function App() {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"></link>
       </head>
       <body className="bg-neutral-800 text-neutral-100">
-        <StarknetProvider defautlNetwork={defautlNetwork} rpcApiKey={rpcApiKey} >
+        <StarknetProvider defautlNetwork={defautlNetwork} rpcUrl={rpcUrl} >
           <header className="fixed top-0 w-full z-50">
             <Header />
           </header>

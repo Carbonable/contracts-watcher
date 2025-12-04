@@ -8,19 +8,24 @@ import { shortString } from "starknet";
 export default function SellPricesCurve() {
     const { yielderAbi, yielderAddress } = useProjectAbis();
     const [graphData, setGraphData] = useState([{}]);
+    const isReady = Boolean(yielderAbi && yielderAddress);
 
     const { data: sellPriceData, isLoading: isLoadingSellPrices, error: errorSellPrices } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_prices',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isReady
     });
 
     const { data: timesData, isLoading: isLoadingTimes, error: errorTimes } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_price_times',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isReady
     });
 
     const CustomTooltip = ({ active, payload, label }: any) => {

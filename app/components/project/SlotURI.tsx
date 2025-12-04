@@ -7,7 +7,7 @@ import ProjectCardSkeleton from "../common/ProjectCardSkeleton";
 import { ProjectDetailSkeleton } from "../common/ProjectDetailsSkeleton";
 
 const SlotURIContext = createContext<SlotURI>({} as SlotURI);
-export default function SlotURIWrapper({ children }: { children: React.ReactNode }) {      
+export default function SlotURIWrapper({ children }: { children: React.ReactNode }) {
     const [slotUri, setSlotUri] = useState<SlotURI|undefined>(undefined);
     const { projectAbi, projectAddress, slot } = useProjectAbis();
 

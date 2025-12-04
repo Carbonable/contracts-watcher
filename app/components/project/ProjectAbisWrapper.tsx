@@ -40,7 +40,6 @@ export default function ProjectAbisWrapper({ children, project }: { children: Re
         async function fetchProjectAbiWrapper() {
             const projectAbiResult = await fetchAbi(provider, project.project);
             setProjectAbi(projectAbiResult);
-
         }
         fetchProjectAbiWrapper();
     }, [provider, project.project]);
@@ -58,7 +57,6 @@ export default function ProjectAbisWrapper({ children, project }: { children: Re
 
     useEffect(() => {
         async function fetchYielderAbiWrapper() {
-
             if (yielderAddress !== undefined) {
                 const yielderAbiResult = await fetchAbi(provider, yielderAddress);
                 setYielderAbi(yielderAbiResult);

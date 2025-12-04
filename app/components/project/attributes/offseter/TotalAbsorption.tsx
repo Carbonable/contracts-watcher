@@ -1,26 +1,36 @@
 import { useContractRead } from "@starknet-react/core";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
 import LabelComponent from "~/components/common/LabelComponent";
-import { bigIntToNumber } from "~/utils/starknet";
+import { bigIntToNumber, parseU256 } from "~/utils/starknet";
 import { DECIMALS } from "~/types/config";
 import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function TotalAbsorption() {
     const { offseterAbi, offseterAddress } = useProjectAbis();
+
+    const title = "Total absorption";
+    const isReady = Boolean(offseterAbi && offseterAddress);
+
     const { data, error, isError, isLoading } = useContractRead({
         address: offseterAddress,
         abi: offseterAbi,
-        functionName: 'get_total_absorption'
+        functionName: 'get_total_absorption',
+        args: [],
+        enabled: isReady
     });
 
-    const title = "Total absorption";
+    if (!isReady || isLoading) {
+        return <LoadingAndError title={title} isLoading={true} isError={false} error={undefined} />;
+    }
 
-    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
+    const value = parseU256(data);
+
+    if (isError || value === undefined) {
         return (
             <LoadingAndError
                 title={title}
-                isLoading={isLoading}
-                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                isLoading={false}
+                isError={true}
                 error={error}
             />
         )
@@ -29,8 +39,7 @@ export default function TotalAbsorption() {
     return (
         <LabelComponent
             title={title}
-            value={`t${(bigIntToNumber(data) * Math.pow(10, -DECIMALS)).toString()}`}
-
+            value={`t${(bigIntToNumber(value) * Math.pow(10, -DECIMALS)).toString()}`}
         />
     )
 }

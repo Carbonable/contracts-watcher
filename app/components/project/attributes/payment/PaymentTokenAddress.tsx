@@ -8,7 +8,8 @@ export default function PaymentTokenAddress({ abi, address }: { abi: Abi, addres
     const { data, error, isError, isLoading } = useContractRead({
         address,
         abi,
-        functionName: 'get_payment_token_address'
+        functionName: 'get_payment_token_address',
+        args: []
     });
 
     const title = "Payment token address";

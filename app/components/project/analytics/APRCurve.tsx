@@ -10,32 +10,42 @@ import { bigIntToNumber } from "~/utils/starknet";
 export default function APRCurve() {
     const { yielderAbi, yielderAddress, minterAbi, minterAddress, projectAbi, projectAddress, slot } = useProjectAbis();
     const [graphData, setGraphData] = useState([{}]);
+    const isYielderReady = Boolean(yielderAbi && yielderAddress);
+    const isMinterReady = Boolean(minterAbi && minterAddress);
 
     const { data: cumSaleData, isLoading: isLoadingCumSale, error: errorCumSale } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_cumsales',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isYielderReady
     });
 
     const { data: cumSaleTimesData, isLoading: isLoadingTimes, error: errorTimes } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_cumsale_times',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isYielderReady
     });
 
     const { data: priceTimesData, isLoading: isLoadingPriceTimes, error: errorPriceTimes } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_price_times',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isYielderReady
     });
 
     const { data: unitPriceData, isLoading: isLoadingUnitPrice, error: errorUnitPrice } = useContractRead({
         address: minterAddress,
         abi: minterAbi,
         functionName: 'get_unit_price',
+        args: [],
+        enabled: isMinterReady
     });
 
     const { data: projectValueData, isLoading: isLoadingProjectValue, error: errorProjectValue } = useContractRead({

@@ -4,15 +4,19 @@ import BooleanComponent from "~/components/common/BooleanComponent";
 
 export default function PreSaleOpen() {
     const { minterAbi, minterAddress } = useProjectAbis();
+
+    const title = "Pre-sale";
+    const isReady = Boolean(minterAbi && minterAddress);
+
     const { data, isLoading, error } = useContractRead({
         address: minterAddress,
         abi: minterAbi,
-        functionName: 'is_pre_sale_open'
+        functionName: 'is_pre_sale_open',
+        args: [],
+        enabled: isReady
     });
 
-    const title = "Pre-sale";
-
-    if (isLoading) {
+    if (!isReady || isLoading) {
         return (
             <BooleanComponent
                 title={title}

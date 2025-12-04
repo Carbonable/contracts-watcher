@@ -7,12 +7,25 @@ export async function fetchAbi(provider: any, address: string) {
     } catch (e) {
         try {
             result = await provider.getClassByHash(address);
+        } catch (e2) {
+            return undefined;
+        }
+    }
+
+    // Handle Sierra contracts where ABI is a string
+    let abiResult = result.abi;
+    if (typeof abiResult === 'string') {
+        try {
+            abiResult = JSON.parse(abiResult);
         } catch (e) {
             return undefined;
         }
     }
 
-    const abiResult = result.abi;
+    if (!Array.isArray(abiResult)) {
+        return undefined;
+    }
+
     const isProxy = abiResult.some((func: any) => (func.name === '__default__'));
 
     if (!isProxy) {
@@ -39,7 +52,16 @@ export async function fetchAbi(provider: any, address: string) {
 
     try {
         const compiledContract = await provider.getClassByHash(implementationAddress);
-        return compiledContract.abi;
+        // Handle Sierra contracts where ABI is a string
+        let implAbi = compiledContract.abi;
+        if (typeof implAbi === 'string') {
+            try {
+                implAbi = JSON.parse(implAbi);
+            } catch (e) {
+                return undefined;
+            }
+        }
+        return implAbi;
     } catch (e) {
         console.error(e);
         return undefined;
@@ -48,4 +70,66 @@ export async function fetchAbi(provider: any, address: string) {
 
 export function bigIntToNumber(value: bigint) {
     return parseFloat(value.toString());
+}
+
+/**
+ * Parse u256 value from contract read result.
+ * u256 in Cairo can return as:
+ * - bigint (already converted by starknet.js)
+ * - {low, high} object (two felt252 values)
+ * - [low, high] array
+ */
+export function parseU256(data: unknown): bigint | undefined {
+    if (data === undefined || data === null) {
+        return undefined;
+    }
+
+    if (typeof data === 'bigint') {
+        return data;
+    }
+
+    if (typeof data === 'object') {
+        const obj = data as Record<string, unknown>;
+        if ('low' in obj && 'high' in obj) {
+            return BigInt(obj.low as string | number | bigint) + (BigInt(obj.high as string | number | bigint) << 128n);
+        }
+        if (Array.isArray(data) && data.length >= 2) {
+            return BigInt(data[0]) + (BigInt(data[1]) << 128n);
+        }
+    }
+
+    // Try to convert directly if it's a number or string
+    if (typeof data === 'number' || typeof data === 'string') {
+        try {
+            return BigInt(data);
+        } catch {
+            return undefined;
+        }
+    }
+
+    return undefined;
+}
+
+/**
+ * Parse felt252 value from contract read result.
+ * felt252 can return as bigint, string, or number.
+ */
+export function parseFelt252(data: unknown): bigint | undefined {
+    if (data === undefined || data === null) {
+        return undefined;
+    }
+
+    if (typeof data === 'bigint') {
+        return data;
+    }
+
+    if (typeof data === 'string' || typeof data === 'number') {
+        try {
+            return BigInt(data);
+        } catch {
+            return undefined;
+        }
+    }
+
+    return undefined;
 }

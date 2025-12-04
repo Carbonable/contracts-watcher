@@ -1,26 +1,36 @@
 import { useContractRead } from "@starknet-react/core";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
 import LabelComponent from "~/components/common/LabelComponent";
-import { bigIntToNumber } from "~/utils/starknet";
+import { bigIntToNumber, parseU256 } from "~/utils/starknet";
 import { DECIMALS } from "~/types/config";
 import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function TotalSale() {
     const { yielderAbi, yielderAddress } = useProjectAbis();
+
+    const title = "Total sale since inception";
+    const isReady = Boolean(yielderAbi && yielderAddress);
+
     const { data, error, isError, isLoading } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
-        functionName: 'get_total_sale'
+        functionName: 'get_total_sale',
+        args: [],
+        enabled: isReady
     });
 
-    const title = "Total sale since inception";
+    if (!isReady || isLoading) {
+        return <LoadingAndError title={title} isLoading={true} isError={false} error={undefined} />;
+    }
 
-    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
+    const value = parseU256(data);
+
+    if (isError || value === undefined) {
         return (
             <LoadingAndError
                 title={title}
-                isLoading={isLoading}
-                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                isLoading={false}
+                isError={true}
                 error={error}
             />
         )
@@ -29,7 +39,7 @@ export default function TotalSale() {
     return (
         <LabelComponent
             title={title}
-            value={`$${(bigIntToNumber(data) * Math.pow(10, -DECIMALS)).toString()}`}
+            value={`$${(bigIntToNumber(value) * Math.pow(10, -DECIMALS)).toString()}`}
         />
     )
 }

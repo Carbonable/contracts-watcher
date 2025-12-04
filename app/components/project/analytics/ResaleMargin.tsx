@@ -21,26 +21,33 @@ export default function ResaleMargin() {
     const [selectedForecastType, setSelectedForecastType] = useState<ForecastType>(ForecastType.BASE);
     const [selectedForecast, setSelectedForecast] = useState<Forecast>(baseForecast);
     const [buyingPricePerTon, setBuyingPricePerTon] = useState<number>(0);
+    const isYielderReady = Boolean(yielderAbi && yielderAddress);
 
     const { data: updatedPriceData, isLoading: isLoadingUpdatedPrices, error: errorUpdatedPrices } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_updated_prices',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isYielderReady
     });
 
     const { data: updatedPriceTimesData, isLoading: isLoadingTimes, error: errorTimes } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_cumsale_times',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isYielderReady
     });
 
     const { data: priceTimesData, isLoading: isLoadingPriceTimes, error: errorPriceTimes } = useContractRead({
         address: yielderAddress,
         abi: yielderAbi,
         functionName: 'get_price_times',
-        parseResult: false
+        args: [],
+        parseResult: false,
+        enabled: isYielderReady
     });
 
     const { data: projectValueData, isLoading: isLoadingProjectValue, error: errorProjectValue } = useContractRead({

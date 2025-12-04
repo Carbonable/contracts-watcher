@@ -9,7 +9,8 @@ export default function PaymentTokenSymbol({ abi, address }: { abi: Abi, address
     const { data, error, isError, isLoading } = useContractRead({
         address,
         abi,
-        functionName: 'symbol'
+        functionName: 'symbol',
+        args: []
     });
 
     const [symbol, setSymbol] = useState<string>("");

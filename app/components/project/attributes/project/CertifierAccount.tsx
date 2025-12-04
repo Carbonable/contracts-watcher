@@ -3,11 +3,14 @@ import { num, getChecksumAddress } from "starknet";
 import { useProjectAbis } from "../../ProjectAbisWrapper";
 import { useConfig } from "~/root";
 import { ContractLinkComponent } from "~/components/common/LinkComponent";
+import { parseFelt252 } from "~/utils/starknet";
 import LoadingAndError from "~/components/common/LoadingAndError";
 
 export default function CertifierAccount() {
     const { projectAbi, projectAddress, slot } = useProjectAbis();
     const { voyagerContractURL } = useConfig();
+
+    const title = "Certifier account";
 
     const { data, error, isLoading, isError } = useContractRead({
         address: projectAddress,
@@ -16,14 +19,14 @@ export default function CertifierAccount() {
         args: [slot]
     });
 
-    const title = "Certifier account";
+    const value = parseFelt252(data);
 
-    if (isLoading || isError || data === undefined || typeof data !== 'bigint') {
+    if (isLoading || isError || value === undefined) {
         return (
             <LoadingAndError
                 title={title}
                 isLoading={isLoading}
-                isError={isError || (data === undefined || typeof data !== 'bigint')}
+                isError={isError || (!isLoading && value === undefined)}
                 error={error}
             />
         )
@@ -32,8 +35,8 @@ export default function CertifierAccount() {
     return (
         <ContractLinkComponent
             title={title}
-            address={getChecksumAddress(num.toHex(data))}
-            href={voyagerContractURL + getChecksumAddress(num.toHex(data))}
+            address={getChecksumAddress(num.toHex(value))}
+            href={voyagerContractURL + getChecksumAddress(num.toHex(value))}
         />
     )
 }
