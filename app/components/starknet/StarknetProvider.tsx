@@ -13,7 +13,7 @@ export function StarknetProvider({ children, defautlNetwork, rpcUrl }: { childre
     }, [defautlNetwork]);
 
     const provider = jsonRpcProvider({
-      rpc: () => ({ nodeUrl: rpcUrl })
+      rpc: () => ({ nodeUrl: rpcUrl, blockIdentifier: 'latest' })
     });
     const connectors = useMemo(() => [braavos(), argent()], []);
 
