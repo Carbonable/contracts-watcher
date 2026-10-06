@@ -1,14 +1,14 @@
 # syntax=docker/dockerfile:1
 
 # Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20.0.0
+ARG NODE_VERSION=20.20.2
 FROM node:${NODE_VERSION}-slim as base
 
 # Install pnpm
 RUN npm i -g pnpm@9.0.6
 
-# Enable corepack to use pnpm efficiently
-RUN corepack enable
+# Enable corepack and pin the pnpm it runs (unpinned, each build downloads the newest pnpm release)
+RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 
 # Set the SHELL environment variable to bash and run pnpm setup
 ENV SHELL=/bin/bash
